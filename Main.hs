@@ -6,30 +6,71 @@ import Network.Wreq
 import Control.Lens
 import Data.Aeson.Lens (_String, key)
 import Data.Aeson (Value, decode, encode)
+import Data.Aeson.Types (parseMaybe, (.:), Parser, Object, Array)
 
+import Data.Text (Text)
 import Data.Map
+import Control.Monad ((<=<))
+import Control.Arrow((&&&))
 
 import Prelude hiding (putStrLn)
-import Data.ByteString.Lazy.Char8 (unpack, putStrLn)
+import Data.ByteString.Lazy.Char8 (pack, unpack, putStrLn)
 
--- import Data.ByteString.Lazy (unpack)
+import Data.Maybe as Myb
 
-type Resp = Response (Map String Value)
+import Test.Hspec
+import PaginationConceptSeriesSpec (spec)
 
-main :: IO ()
-main = do
-    resp <- get "https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&utf8=1&srsearch=Haskell"
-    -- asJSON resp :: IO (Response (Map String Value))
-    -- let sc = resp ^. responseStatus . statusCode
+import System.Environment
+
+
+main, runTests :: IO ()
+main = fmap listToMaybe getArgs >>= maybe runTests runSearch
+runTests = do
+    putStrLn "No searchphrase provided, so I am running unit tests instead"
+    hspec spec
+
+runSearch :: String -> IO ()
+runSearch searchedWord = do
+    putStr "Searchphrase: "
+    putStrLn $ pack searchedWord
+    putStrLn ""
+    maybeJsonObject <- searchService searchedWord
+    maybe (putStrLn "Error") (presentSearchResult . extractFoundTitlesAndContinuationControl) maybeJsonObject
+
+type JSONResponseObject = Object
+type Title = String
+type SearchResult = (Maybe [Title], Maybe ContinuationControl)
+type ContinuationControl = Object
+
+searchService :: String -> IO (Maybe JSONResponseObject)
+searchService searchedWord = do
+    resp <- get $ searchURL searchedWord
     let rawBody = resp ^. responseBody
-    let rawBodySimpleString = unpack rawBody
-    let Just ast = decode rawBody :: Maybe Value
-    putStrLn $ encode ast
-    -- let sh = fromJust ma
-    -- asJSON resp >>= suck
-    -- putStrLn rawBodySimpleString
-    -- print ast
+    let maybeJsonObject = decode rawBody
+    return maybeJsonObject
 
+presentSearchResult :: SearchResult -> IO ()
+presentSearchResult (maybeTitles, maybeContinuationObject) = print maybeTitles >> print maybeContinuationObject
 
-suck :: Response (Map String Value) -> IO ()
-suck _ = return ()
+searchURL :: String -> String
+searchURL = ("https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&utf8=1&srsearch=" ++)
+
+extractFoundTitlesAndContinuationControl :: JSONResponseObject -> SearchResult
+extractFoundTitlesAndContinuationControl = maybeTitlesInRootObject &&& maybeContinuationObjectInRootObject
+
+maybeTitlesInRootObject :: JSONResponseObject -> Maybe [Title]
+maybeTitlesInRootObject = fmap selectTitlesInSearchArray . (maybeSearchArrayInQueryObject <=< maybeQueryObjectInRootObject)
+
+maybeContinuationObjectInRootObject, maybeQueryObjectInRootObject :: Object -> Maybe Object
+maybeContinuationObjectInRootObject = parseMaybe (.: "continue")
+maybeQueryObjectInRootObject        = parseMaybe (.: "query")
+
+maybeSearchArrayInQueryObject :: Object -> Maybe [Object]
+maybeSearchArrayInQueryObject = parseMaybe (.: "search")
+
+selectTitlesInSearchArray :: [Object] -> [String]
+selectTitlesInSearchArray = Myb.mapMaybe maybeTitleInSearchArrayItemObject
+
+maybeTitleInSearchArrayItemObject :: Object -> Maybe String
+maybeTitleInSearchArrayItemObject = parseMaybe (.: "title")
