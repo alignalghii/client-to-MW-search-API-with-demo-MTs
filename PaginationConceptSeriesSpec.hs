@@ -2,20 +2,22 @@ module PaginationConceptSeriesSpec where
 
 import Test.Hspec
 import PaginationConceptSeries
-import Control.Monad.State.Strict (StateT, state, get, put)
+import Control.Monad.State.Strict (StateT (StateT), runStateT, state, get, put)
 
+import Aux
+import SampleTypes
 
 -- God's book has (almost) infinitely many pages, an infinite state machine is needed to fetch them:
-infiniteBook :: Int -> (String, Int)
+infiniteBook :: Transition Int String
 infiniteBook n = ("Page #" ++ show n, n + 1)
 
 -- Even a finite state machine can be run (almost) forever:
-clockTicking :: Bool -> (String, Bool)
+clockTicking :: Transition Bool String
 clockTicking True  = ("tick", False)
 clockTicking False = ("tock", True )
 
 -- Seasons are rather *paginated* here, exemplified and enumerated finitely, instead of being run forever:
-exemplifySeasons :: Maybe Int -> (String, Maybe Int)
+exemplifySeasons :: PaginationTransition Int String
 exemplifySeasons Nothing  = ("spring", Just 1 )
 exemplifySeasons (Just 1) = ("summer", Just 2 )
 exemplifySeasons (Just 2) = ("autumn", Just 3 )
@@ -25,23 +27,20 @@ exemplifySeasons (Just 3) = ("winter", Nothing)
 -- Let us simulate an IO effect: a server that can be requested only thorough HTTP connection (IO monad):
 
 type BookTitle = String
-type ContinuationToken = String
 
-bibliographyServer :: Monad process => Maybe ContinuationToken -> process ([BookTitle], Maybe ContinuationToken)
-bibliographyServer Nothing                              = return (["Harry Potter I", "H.P. II" , "H.P. III"     ], Just "token-for-remaining-8-books")
-bibliographyServer (Just "token-for-remaining-8-books") = return (["H.P. IV"       , "H.P. V"  , "Lord of rings"], Just "token-for-remaining-5-books")
-bibliographyServer (Just "token-for-remaining-5-books") = return (["The Hobbit"    , "Maya bee", "Shrek"        ], Just "token-for-remaining-2-books")
-bibliographyServer (Just "token-for-remaining-2-books") = return (["Shrek II"      , "Shrek III"                ], Nothing                           )
-bibliographyServer (Just tkn                          ) = return (["<<UNRECOGNIZED TOKEN>>[" ++ show tkn ++ "]" ], Nothing                           )
+bibliographyTransition :: PaginationTransition ContinuationToken [BookTitle]
+bibliographyTransition Nothing                              = (["Harry Potter I", "H.P. II" , "H.P. III"     ], Just "token-for-remaining-8-books")
+bibliographyTransition (Just "token-for-remaining-8-books") = (["H.P. IV"       , "H.P. V"  , "Lord of rings"], Just "token-for-remaining-5-books")
+bibliographyTransition (Just "token-for-remaining-5-books") = (["The Hobbit"    , "Maya bee", "Shrek"        ], Just "token-for-remaining-2-books")
+bibliographyTransition (Just "token-for-remaining-2-books") = (["Shrek II"      , "Shrek III"                ], Nothing                           )
+bibliographyTransition (Just tkn                          ) = (["<<UNRECOGNIZED TOKEN>>[" ++ show tkn ++ "]" ], Nothing                           )
 
-type ErrorMsg = String
 
-bibliographyServer_instance :: StateT (Maybe ContinuationToken) (Either ErrorMsg) [BookTitle]
-bibliographyServer_instance = do
-    maybeToken <- get
-    (listing, maybeNextToken) <- bibliographyServer maybeToken
-    put maybeNextToken
-    return listing
+bibliographyTransitionProcess :: PaginationProcess ContinuationToken ErrorM [BookTitle]
+bibliographyTransitionProcess = return . bibliographyTransition
+
+bibliographyStateT :: PaginationT ContinuationToken ErrorM [BookTitle]
+bibliographyStateT = pureTransitionFunctionToStateT bibliographyTransition
 
 
 -- Now here are the tests (specifications) based on the examples above:
@@ -65,6 +64,6 @@ spec = do
     describe "Process pagination" $ do
         describe "Biliography server" $ do
             it "Without state transformer" $ do
-                process_pagination_noMT bibliographyServer `shouldBe` (Right [["Harry Potter I", "H.P. II", "H.P. III"], ["H.P. IV", "H.P. V", "Lord of rings"], ["The Hobbit", "Maya bee", "Shrek"], ["Shrek II", "Shrek III"]] :: Either ErrorMsg [[BookTitle]])
+                process_pagination_noMT bibliographyTransitionProcess `shouldBe` return [["Harry Potter I", "H.P. II", "H.P. III"], ["H.P. IV", "H.P. V", "Lord of rings"], ["The Hobbit", "Maya bee", "Shrek"], ["Shrek II", "Shrek III"]]
             it "With state transformer" $ do
-                process_pagination_MT bibliographyServer_instance `shouldBe` (Right [["Harry Potter I", "H.P. II", "H.P. III"], ["H.P. IV", "H.P. V", "Lord of rings"], ["The Hobbit", "Maya bee", "Shrek"], ["Shrek II", "Shrek III"]] :: Either ErrorMsg [[BookTitle]])
+                process_pagination_MT bibliographyStateT `shouldBe` return [["Harry Potter I", "H.P. II", "H.P. III"], ["H.P. IV", "H.P. V", "Lord of rings"], ["The Hobbit", "Maya bee", "Shrek"], ["Shrek II", "Shrek III"]]
