@@ -19,7 +19,8 @@ import Data.ByteString.Lazy.Char8 (pack, unpack, putStrLn)
 import Data.Maybe as Myb
 
 import Test.Hspec
-import PaginationConceptSeriesSpec (spec)
+import qualified Effectless.PaginationConceptSeriesSpec as EffectlessSpecs (spec)
+import qualified Effectful.PaginationConceptSeriesSpec  as EffectfulSpecs  (spec)
 
 import System.Environment
 
@@ -28,7 +29,7 @@ main, runTests :: IO ()
 main = fmap listToMaybe getArgs >>= maybe runTests runSearch
 runTests = do
     putStrLn "No searchphrase provided, so I am running unit tests instead"
-    hspec spec
+    hspec $ EffectlessSpecs.spec >> EffectfulSpecs.spec
 
 runSearch :: String -> IO ()
 runSearch searchedWord = do
