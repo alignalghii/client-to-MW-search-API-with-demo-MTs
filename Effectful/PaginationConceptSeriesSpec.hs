@@ -34,6 +34,6 @@ spec = do
     describe "Effectful pagination" $ do
         describe "Biliography server" $ do
             it "Without state transformer" $ do
-                effect_pagination_noMT bibliographyTransitionEffect `shouldBe` return [["Harry Potter I", "H.P. II", "H.P. III"], ["H.P. IV", "H.P. V", "Lord of rings"], ["The Hobbit", "Maya bee", "Shrek"], ["Shrek II", "Shrek III"]]
+                pagination_noMT bibliographyTransitionEffect `shouldBe` return [["Harry Potter I", "H.P. II", "H.P. III"], ["H.P. IV", "H.P. V", "Lord of rings"], ["The Hobbit", "Maya bee", "Shrek"], ["Shrek II", "Shrek III"]]
             it "With state transformer" $ do
-                effect_pagination_MT bibliographyStateT `shouldBe` return [["Harry Potter I", "H.P. II", "H.P. III"], ["H.P. IV", "H.P. V", "Lord of rings"], ["The Hobbit", "Maya bee", "Shrek"], ["Shrek II", "Shrek III"]]
+                pagination_MT bibliographyStateT `shouldBe` return [["Harry Potter I", "H.P. II", "H.P. III"], ["H.P. IV", "H.P. V", "Lord of rings"], ["The Hobbit", "Maya bee", "Shrek"], ["Shrek II", "Shrek III"]]

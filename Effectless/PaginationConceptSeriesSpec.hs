@@ -30,14 +30,14 @@ spec = do
     describe "Infinite effectless pagination" $ do
         describe "Both infinite state-jumps and finite state-jumps can have an infinite runtime" $ do
             it "God's infinite book with infinite state-jumps" $ do
-                take 5 (infinite_native_pagination infiniteBook 1)    `shouldBe` ["Page #1", "Page #2", "Page #3", "Page #4", "Page #5"]
+                take 5 (infinite_pagination infiniteBook 1)    `shouldBe` ["Page #1", "Page #2", "Page #3", "Page #4", "Page #5"]
             it "A ticking clock with finite state-jumps but infinite runtime" $ do
-                take 5 (infinite_native_pagination clockTicking True) `shouldBe` ["tick"   , "tock"   , "tick"   , "tock"   , "tick"   ]
+                take 5 (infinite_pagination clockTicking True) `shouldBe` ["tick"   , "tock"   , "tick"   , "tock"   , "tick"   ]
     describe "Limitable effectless pagination" $ do
         describe "There are only four seasons, the sample is limited" $ do
             it "simple-function non-DRY solution" $ do
-                native_pagination_nonDRY exemplifySeasons     `shouldBe` ["spring", "summer", "autumn", "winter"]
+                pagination_nonDRY exemplifySeasons     `shouldBe` ["spring", "summer", "autumn", "winter"]
             it "simple-function but more economical (DRY) solution" $ do
-                native_pagination        exemplifySeasons     `shouldBe` ["spring", "summer", "autumn", "winter"]
+                pagination        exemplifySeasons     `shouldBe` ["spring", "summer", "autumn", "winter"]
             it "State-monad solution" $ do
-                native_pagination_SM (state exemplifySeasons) `shouldBe` ["spring", "summer", "autumn", "winter"]
+                pagination_SM (state exemplifySeasons) `shouldBe` ["spring", "summer", "autumn", "winter"]
