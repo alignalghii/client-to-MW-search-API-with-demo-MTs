@@ -36,10 +36,10 @@ bibliographyTransition (Just "token-for-remaining-2-books") = (["Shrek II"      
 bibliographyTransition (Just tkn                          ) = (["<<UNRECOGNIZED TOKEN>>[" ++ show tkn ++ "]" ], Nothing                           )
 
 
-bibliographyTransitionProcess :: PaginationProcess ContinuationToken ErrorM [BookTitle]
-bibliographyTransitionProcess = return . bibliographyTransition
+bibliographyTransitionEffect :: PaginationEffect ContinuationToken ErrorM [BookTitle]
+bibliographyTransitionEffect = return . bibliographyTransition
 
-bibliographyStateT :: PaginationT ContinuationToken ErrorM [BookTitle]
+bibliographyStateT :: PaginationStateT ContinuationToken ErrorM [BookTitle]
 bibliographyStateT = pureTransitionFunctionToStateT bibliographyTransition
 
 
@@ -47,13 +47,13 @@ bibliographyStateT = pureTransitionFunctionToStateT bibliographyTransition
 
 spec :: Spec
 spec = do
-    describe "Infinite native pagination" $ do
+    describe "Infinite effectless pagination" $ do
         describe "Both infinite state-jumps and finite state-jumps can have an infinite runtime" $ do
             it "God's infinite book with infinite state-jumps" $ do
                 take 5 (infinite_native_pagination infiniteBook 1)    `shouldBe` ["Page #1", "Page #2", "Page #3", "Page #4", "Page #5"]
             it "A ticking clock with finite state-jumps but infinite runtime" $ do
                 take 5 (infinite_native_pagination clockTicking True) `shouldBe` ["tick"   , "tock"   , "tick"   , "tock"   , "tick"   ]
-    describe "Limitable native pagination" $ do
+    describe "Limitable effectless pagination" $ do
         describe "There are only four seasons, the sample is limited" $ do
             it "simple-function non-DRY solution" $ do
                 native_pagination_nonDRY exemplifySeasons     `shouldBe` ["spring", "summer", "autumn", "winter"]
@@ -61,9 +61,9 @@ spec = do
                 native_pagination        exemplifySeasons     `shouldBe` ["spring", "summer", "autumn", "winter"]
             it "State-monad solution" $ do
                 native_pagination_SM (state exemplifySeasons) `shouldBe` ["spring", "summer", "autumn", "winter"]
-    describe "Process pagination" $ do
+    describe "Effectful pagination" $ do
         describe "Biliography server" $ do
             it "Without state transformer" $ do
-                process_pagination_noMT bibliographyTransitionProcess `shouldBe` return [["Harry Potter I", "H.P. II", "H.P. III"], ["H.P. IV", "H.P. V", "Lord of rings"], ["The Hobbit", "Maya bee", "Shrek"], ["Shrek II", "Shrek III"]]
+                effect_pagination_noMT bibliographyTransitionEffect `shouldBe` return [["Harry Potter I", "H.P. II", "H.P. III"], ["H.P. IV", "H.P. V", "Lord of rings"], ["The Hobbit", "Maya bee", "Shrek"], ["Shrek II", "Shrek III"]]
             it "With state transformer" $ do
-                process_pagination_MT bibliographyStateT `shouldBe` return [["Harry Potter I", "H.P. II", "H.P. III"], ["H.P. IV", "H.P. V", "Lord of rings"], ["The Hobbit", "Maya bee", "Shrek"], ["Shrek II", "Shrek III"]]
+                effect_pagination_MT bibliographyStateT `shouldBe` return [["Harry Potter I", "H.P. II", "H.P. III"], ["H.P. IV", "H.P. V", "Lord of rings"], ["The Hobbit", "Maya bee", "Shrek"], ["Shrek II", "Shrek III"]]

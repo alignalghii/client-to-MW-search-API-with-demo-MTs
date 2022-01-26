@@ -31,33 +31,33 @@ native_pagination' isStartMode transitFun maybePgnToken
                                             in firstPage : native_pagination' False transitFun maybeNextPgnToken
     | otherwise                           = []
 
-native_pagination_SM :: Pagination pgnToken page -> [page]
+native_pagination_SM :: PaginationState pgnToken page -> [page]
 native_pagination_SM = flip evalState Nothing . native_pagination_SM' True
 
-native_pagination_SM' :: Bool -> Pagination pgnToken page -> Pagination pgnToken [page]
+native_pagination_SM' :: Bool -> PaginationState pgnToken page -> PaginationState pgnToken [page]
 native_pagination_SM' isStartMode transition = do
         maybeToken <- get
         if isStartMode || isJust maybeToken
             then liftM2 (:) transition $ native_pagination_SM' False transition
             else return []
 
-process_pagination_noMT :: Monad process => PaginationProcess pgnToken process page -> process [page]
-process_pagination_noMT transitProcess = process_pagination_noMT' True transitProcess Nothing
+effect_pagination_noMT :: Monad effect => PaginationEffect pgnToken effect page -> effect [page]
+effect_pagination_noMT transitEffect = effect_pagination_noMT' True transitEffect Nothing
 
-process_pagination_noMT' :: Monad process => Bool -> PaginationProcess pgnToken process page -> Maybe pgnToken -> process [page]
-process_pagination_noMT' isStartMode transitProcess maybePgnToken = do
+effect_pagination_noMT' :: Monad effect => Bool -> PaginationEffect pgnToken effect page -> Maybe pgnToken -> effect [page]
+effect_pagination_noMT' isStartMode transitEffect maybePgnToken = do
     if isStartMode || isJust maybePgnToken
         then do
-            (firstPage, maybeNextPgnToken) <- transitProcess maybePgnToken
-            (firstPage :) <$> process_pagination_noMT' False transitProcess maybeNextPgnToken
+            (firstPage, maybeNextPgnToken) <- transitEffect maybePgnToken
+            (firstPage :) <$> effect_pagination_noMT' False transitEffect maybeNextPgnToken
         else return []
 
-process_pagination_MT :: Monad process => PaginationT pgnToken process page -> process [page]
-process_pagination_MT = flip evalStateT Nothing . process_pagination_MT' True
+effect_pagination_MT :: Monad effect => PaginationStateT pgnToken effect page -> effect [page]
+effect_pagination_MT = flip evalStateT Nothing . effect_pagination_MT' True
 
-process_pagination_MT' :: Monad process => Bool -> PaginationT pgnToken process page -> PaginationT pgnToken process [page]
-process_pagination_MT' isStartMode transitProcess = do
+effect_pagination_MT' :: Monad effect => Bool -> PaginationStateT pgnToken effect page -> PaginationStateT pgnToken effect [page]
+effect_pagination_MT' isStartMode transitEffect = do
     maybePgnToken <- get
     if isStartMode || isJust maybePgnToken
-        then liftM2 (:) transitProcess $ process_pagination_MT' False transitProcess
+        then liftM2 (:) transitEffect $ effect_pagination_MT' False transitEffect
         else return []

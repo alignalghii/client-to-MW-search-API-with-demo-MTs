@@ -5,11 +5,11 @@ import Control.Monad.State.Strict (State, StateT (StateT))
 type Transition state value = state -> (value, state)
 type PaginationTransition continuationToken page = Transition (Maybe continuationToken) page
 
-type TransitionProcess state process value = state -> process (value, state)
-type PaginationProcess token process page  = TransitionProcess (Maybe token) process page
+type TransitionEffect state effect value = state -> effect (value, state)
+type PaginationEffect token effect page  = TransitionEffect (Maybe token) effect page
 
-type Pagination token page = State (Maybe token) page
-type PaginationT token process page = StateT (Maybe token) process page
+type PaginationState token page = State (Maybe token) page
+type PaginationStateT token effect page = StateT (Maybe token) effect page
 
-pureTransitionFunctionToStateT :: Monad process => Transition state value -> StateT state process value
+pureTransitionFunctionToStateT :: Monad effect => Transition state value -> StateT state effect value
 pureTransitionFunctionToStateT = StateT . (return .)
