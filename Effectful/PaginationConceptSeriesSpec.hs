@@ -1,7 +1,7 @@
-module Effectful.PaginationConceptSeriesSpec where
+module Effectful.PaginationConceptSeriesSpec (spec) where
 
-import Test.Hspec
-import Effectful.PaginationConceptSeries
+import Test.Hspec (Spec, describe, it, shouldBe)
+import Effectful.PaginationConceptSeries (pagination_noMT, pagination_MT)
 
 import Data.Pagination (ContinuationToken, PaginationEffect)
 import Data.ErrorEffect (ErrorEffect, errorfree, withError)

@@ -1,4 +1,4 @@
-module Data.ErrorEffect where
+module Data.ErrorEffect (ErrorEffect, errorfree, withError) where
 
 type ErrorEffect = Either ErrorMsg
 

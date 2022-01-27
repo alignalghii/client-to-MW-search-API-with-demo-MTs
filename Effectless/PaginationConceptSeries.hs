@@ -1,9 +1,10 @@
-module Effectless.PaginationConceptSeries where
+module Effectless.PaginationConceptSeries (infinite_pagination, pagination_nonDRY, pagination_TF, pagination_SM) where
 
 import Data.Transition (Transition)
 import Data.Pagination (PaginationTransition, PaginationState)
 
-import Control.Monad.State.Strict
+import Control.Monad.State.Strict (evalState, get)
+import Control.Monad (liftM2)
 import Data.Maybe (isJust)
 
 ----------------------------------------------------------------------------------------

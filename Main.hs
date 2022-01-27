@@ -1,28 +1,27 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Main where
+module Main (main) where
 
-import Network.Wreq
+import Network.Wreq (get, responseBody)
 
-import Control.Lens
+import Control.Lens ((^.))
 import Data.Aeson.Lens (_String, key)
 import Data.Aeson (Value, decode, encode)
 import Data.Aeson.Types (parseMaybe, (.:), Parser, Object, Array)
 
 import Data.Text (Text)
-import Data.Map
 import Control.Monad ((<=<))
 import Control.Arrow((&&&))
 
 import Prelude hiding (putStrLn)
 import Data.ByteString.Lazy.Char8 (pack, unpack, putStrLn)
 
-import Data.Maybe as Myb
+import Data.Maybe as Myb (mapMaybe, listToMaybe)
 
-import Test.Hspec
+import Test.Hspec (hspec)
 import qualified Effectless.PaginationConceptSeriesSpec as EffectlessSpecs (spec)
 import qualified Effectful.PaginationConceptSeriesSpec  as EffectfulSpecs  (spec)
 
-import System.Environment
+import System.Environment (getArgs)
 
 
 main, runTests :: IO ()
@@ -55,7 +54,7 @@ presentSearchResult :: SearchResult -> IO ()
 presentSearchResult (maybeTitles, maybeContinuationObject) = print maybeTitles >> print maybeContinuationObject
 
 searchURL :: String -> String
-searchURL = ("https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&utf8=1&srsearch=" ++)
+searchURL = (++) "https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&utf8=1&srsearch="
 
 extractFoundTitlesAndContinuationControl :: JSONResponseObject -> SearchResult
 extractFoundTitlesAndContinuationControl = maybeTitlesInRootObject &&& maybeContinuationObjectInRootObject

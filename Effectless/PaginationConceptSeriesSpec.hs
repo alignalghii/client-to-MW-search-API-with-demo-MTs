@@ -1,7 +1,7 @@
-module Effectless.PaginationConceptSeriesSpec where
+module Effectless.PaginationConceptSeriesSpec (spec) where
 
-import Test.Hspec
-import Effectless.PaginationConceptSeries
+import Test.Hspec (Spec, describe, it, shouldBe)
+import Effectless.PaginationConceptSeries (infinite_pagination, pagination_nonDRY, pagination_TF, pagination_SM)
 import Control.Monad.State.Strict (StateT (StateT), runStateT, state, get, put)
 
 import Data.Transition (Transition)
@@ -38,6 +38,6 @@ spec = do
             it "simple-function non-DRY solution" $ do
                 pagination_nonDRY exemplifySeasons     `shouldBe` ["spring", "summer", "autumn", "winter"]
             it "simple-function but more economical (DRY) solution" $ do
-                pagination        exemplifySeasons     `shouldBe` ["spring", "summer", "autumn", "winter"]
+                pagination_TF     exemplifySeasons     `shouldBe` ["spring", "summer", "autumn", "winter"]
             it "State-monad solution" $ do
                 pagination_SM (state exemplifySeasons) `shouldBe` ["spring", "summer", "autumn", "winter"]
