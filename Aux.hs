@@ -11,5 +11,3 @@ type PaginationEffect token effect page  = TransitionEffect (Maybe token) effect
 type PaginationState token page = State (Maybe token) page
 type PaginationStateT token effect page = StateT (Maybe token) effect page
 
-pureTransitionFunctionToStateT :: Monad effect => Transition state value -> StateT state effect value
-pureTransitionFunctionToStateT = StateT . (return .)
