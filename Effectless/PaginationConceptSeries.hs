@@ -1,11 +1,11 @@
 module Effectless.PaginationConceptSeries where
 
-import SampleTypes
+import Data.Transition (Transition)
+import Data.Pagination (PaginationTransition, PaginationState)
 
 import Control.Monad.State.Strict
 import Data.Maybe (isJust)
 
-import Aux
 
 infinite_pagination :: Transition paginationState page -> paginationState -> [page]
 infinite_pagination transitFun initialState = let (firstPage, nextState) = transitFun initialState

@@ -1,11 +1,9 @@
 module Effectful.PaginationConceptSeries where
 
-import SampleTypes
+import Data.Pagination (PaginationEffect, PaginationStateT)
 
 import Control.Monad.State.Strict
 import Data.Maybe (isJust)
-
-import Aux
 
 
 pagination_noMT :: Monad effect => PaginationEffect pgnToken effect page -> effect [page]

@@ -4,8 +4,8 @@ import Test.Hspec
 import Effectless.PaginationConceptSeries
 import Control.Monad.State.Strict (StateT (StateT), runStateT, state, get, put)
 
-import Aux
-import SampleTypes
+import Data.Transition (Transition)
+import Data.Pagination (PaginationTransition)
 
 -- God's book has (almost) infinitely many pages, an infinite state machine is needed to fetch them:
 infiniteBook :: Transition Int String
