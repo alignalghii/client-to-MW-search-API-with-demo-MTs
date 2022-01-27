@@ -6,6 +6,15 @@ import Control.Monad.State.Strict
 import Data.Maybe (isJust)
 
 
+----------------------------------------------------------------------
+-- Building a monadic effect on top of a state tansition
+--  * either upon a transition function as a monadic wrapper parameter
+--  * or upon a state monad transformer
+----------------------------------------------------------------------
+
+
+-- Implemented *without* monad transformers:
+
 pagination_noMT :: Monad effect => PaginationEffect pgnToken effect page -> effect [page]
 pagination_noMT transitEffect = pagination_noMT' True transitEffect Nothing
 
@@ -16,6 +25,9 @@ pagination_noMT' isStartMode transitEffect maybePgnToken = do
             (firstPage, maybeNextPgnToken) <- transitEffect maybePgnToken
             (firstPage :) <$> pagination_noMT' False transitEffect maybeNextPgnToken
         else return []
+
+
+-- Implemented *with* monad transformers:
 
 pagination_MT :: Monad effect => PaginationStateT pgnToken effect page -> effect [page]
 pagination_MT = flip evalStateT Nothing . pagination_MT' True
