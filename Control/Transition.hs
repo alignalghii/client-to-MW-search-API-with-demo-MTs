@@ -1,4 +1,4 @@
-module Data.Transition where
+module Control.Transition where
 
 
 type Transition state value = state -> (value, state)

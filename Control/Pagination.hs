@@ -1,6 +1,6 @@
-module Data.Pagination where
+module Control.Pagination where
 
-import Data.Transition (Transition, TransitionEffect)
+import Control.Transition (Transition, TransitionEffect)
 import Control.Monad.State.Strict (State, StateT)
 
 

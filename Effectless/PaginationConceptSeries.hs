@@ -1,7 +1,7 @@
 module Effectless.PaginationConceptSeries (infinite_pagination, pagination_nonDRY, pagination_TF, pagination_SM) where
 
-import Data.Transition (Transition)
-import Data.Pagination (PaginationTransition, PaginationState)
+import Control.Transition (Transition)
+import Control.Pagination (PaginationTransition, PaginationState)
 
 import Control.Monad.State.Strict (evalState, get)
 import Control.Monad (liftM2)

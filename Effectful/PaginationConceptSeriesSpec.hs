@@ -3,8 +3,8 @@ module Effectful.PaginationConceptSeriesSpec (spec) where
 import Test.Hspec (Spec, describe, it, shouldBe)
 import Effectful.PaginationConceptSeries (pagination_noMT, pagination_MT)
 
-import Data.Pagination (ContinuationToken, PaginationEffect)
-import Data.ErrorEffect (ErrorEffect, errorfree, withError)
+import Control.Pagination (ContinuationToken, PaginationEffect)
+import Control.ErrorEffect (ErrorEffect, errorfree, withError)
 import Control.Monad.State.Strict (StateT (StateT))
 
 

@@ -1,6 +1,6 @@
 module Effectful.PaginationConceptSeries (pagination_noMT, pagination_MT) where
 
-import Data.Pagination (PaginationEffect, PaginationStateT)
+import Control.Pagination (PaginationEffect, PaginationStateT)
 
 import Control.Monad.State.Strict (get, evalStateT)
 import Control.Monad (liftM2)
