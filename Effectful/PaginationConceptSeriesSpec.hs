@@ -3,7 +3,7 @@ module Effectful.PaginationConceptSeriesSpec (spec) where
 import Test.Hspec (Spec, describe, it, shouldBe)
 import Effectful.PaginationConceptSeries (pagination_noMT, pagination_MT)
 
-import Control.Pagination (ContinuationToken, PaginationEffect)
+import Control.Pagination (PaginationEffect)
 import Control.ErrorEffect (ErrorEffect, errorfree, withError)
 import Control.Monad.State.Strict (StateT (StateT))
 
@@ -15,6 +15,7 @@ import Control.Monad.State.Strict (StateT (StateT))
 -- But instead of the hard-to-test `IO` monad, we use the simpler `ErrorEffect` monad here for testing:
 
 type BookTitle = String
+type ContinuationToken = String
 
 bibliographyTransitionEffect :: PaginationEffect ContinuationToken ErrorEffect [BookTitle]
 bibliographyTransitionEffect Nothing               = errorfree (["Harry Potter I", "H.P. II" , "H.P. III"     ], Just "8-books-more")

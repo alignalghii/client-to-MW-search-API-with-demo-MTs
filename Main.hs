@@ -1,7 +1,7 @@
 module Main (main) where
 
 import System.Console.GetOpt
-import WebServiceConsultation (runSearch)
+import WebServiceConsultation (runSearchFirstPage)
 
 import Test.Hspec (hspec)
 import qualified Effectless.PaginationConceptSeriesSpec as EffectlessSpecs (spec)
@@ -27,10 +27,10 @@ optGrammar = [
 
 processOpts :: ([Flag], [String], [String]) -> IO ()
 processOpts ([Test]              , []    ,     []   ) = runTest
-processOpts ([SearchService expr], []    ,     []   ) = runSearchService expr
+processOpts ([SearchService expr], []    ,     []   ) = runSearchFirstPage expr
 processOpts ([Help]              , []    ,     []   ) = runHelp
 processOpts ([_]                 , _:_   ,     []   ) = putStrLn "Non-option arguments cannot be used" >> runHelp
-processOpts ([]                  , [expr],     []   ) = putStrLn ("Interpreting as abbrev for `--search <EXPR>") >> runSearchService expr
+processOpts ([]                  , [expr],     []   ) = putStrLn ("Interpreting as abbrev for `--search <EXPR>") >> runSearchFirstPage expr
 processOpts ([]                  , []    ,     []   ) = putStrLn "Interpreting as abbrev for `--help`" >> runHelp
 processOpts ([]                  , _:_:_ ,     []   ) = putStrLn "Non-option arguments cannot be used" >> runHelp
 processOpts (_                   , _     , err@(_:_)) = mapM_ putStr err >> runHelp
@@ -46,8 +46,3 @@ runHelp = do
     putStrLn $ usageInfo ("Usage: " ++ programName ++ " <OPTION>\nwhere <OPTION> can be *one* of the following options:") optGrammar
     putStrLn $ "Abbreviations:\n    `" ++ programName ++ "` alone is interpreted as `" ++ programName ++ " --help`"
     putStrLn $ "    `" ++ programName ++ " <EXPR>` is interpreted as `" ++ programName ++ " --search <EXPR>`"
-
-runSearchService :: String -> IO ()
-runSearchService expr = do
-    putStrLn $ "Service: search for `" ++ expr ++ "'"
-    runSearch expr

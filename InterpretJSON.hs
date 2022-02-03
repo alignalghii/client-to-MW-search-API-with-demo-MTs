@@ -1,35 +1,34 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module InterpretJSON (JSONResponseObject, Title, SearchResult, ContinuationControl, extractFoundTitlesAndContinuationControl) where
+module InterpretJSON (JSONResponseObject, Title, Sroffset, extractFoundTitlesAndSroffset) where
 
-import Data.Aeson (decode)
-import Data.Aeson.Types (parseMaybe, (.:), Parser, Object, Array)
+import SearchResult (SearchResult, Title, Sroffset)
+
+import Data.Aeson.Types (parseMaybe, (.:), Object, FromJSON)
 import qualified Data.Maybe as Myb (mapMaybe) -- Aeson overwrites `mapMaybe`, but we need the original (Prelude) variant!
+import Data.Text (Text)
 
 import Control.Monad ((<=<))
 import Control.Arrow ((&&&))
+import Data.Maybe (fromMaybe)
 
 
 type JSONResponseObject = Object
-type Title = String
-type SearchResult = (Maybe [Title], Maybe ContinuationControl)
-type ContinuationControl = Object
 
-extractFoundTitlesAndContinuationControl :: JSONResponseObject -> SearchResult
-extractFoundTitlesAndContinuationControl = maybeTitlesInRootObject &&& maybeContinuationObjectInRootObject
+extractFoundTitlesAndSroffset :: JSONResponseObject -> ([Title], Maybe Sroffset)
+extractFoundTitlesAndSroffset = titlesInRootObject &&& maybeSroffsetInRootObject
 
-maybeTitlesInRootObject :: JSONResponseObject -> Maybe [Title]
-maybeTitlesInRootObject = fmap selectTitlesInSearchArray . (maybeSearchArrayInQueryObject <=< maybeQueryObjectInRootObject)
+titlesInRootObject :: JSONResponseObject -> [Title]
+titlesInRootObject = maybe [] (multiselect "title") . (select "search" <=< select "query")
 
-maybeContinuationObjectInRootObject, maybeQueryObjectInRootObject :: Object -> Maybe Object
-maybeContinuationObjectInRootObject = parseMaybe (.: "continue")
-maybeQueryObjectInRootObject        = parseMaybe (.: "query")
+maybeSroffsetInRootObject :: Object -> Maybe Sroffset
+maybeSroffsetInRootObject = select "sroffset" <=< select "continue"
 
-maybeSearchArrayInQueryObject :: Object -> Maybe [Object]
-maybeSearchArrayInQueryObject = parseMaybe (.: "search")
+-- maybeSelectPath :: FromJSON b => [Text] -> Object -> Maybe b
+-- maybeSelectPath = foldr (\lbl f -> per lbl <=< f) Just
 
-selectTitlesInSearchArray :: [Object] -> [String]
-selectTitlesInSearchArray = Myb.mapMaybe maybeTitleInSearchArrayItemObject
+select :: FromJSON b => Text -> Object -> Maybe b
+select = parseMaybe . flip (.:)
 
-maybeTitleInSearchArrayItemObject :: Object -> Maybe String
-maybeTitleInSearchArrayItemObject = parseMaybe (.: "title")
+multiselect :: FromJSON b => Text -> [Object] -> [b]
+multiselect = Myb.mapMaybe . select

@@ -4,8 +4,6 @@ import Control.Transition (Transition, TransitionEffect)
 import Control.Monad.State.Strict (State, StateT)
 
 
-type ContinuationToken = String
-
 type PaginationTransition continuationToken page = Transition (Maybe continuationToken) page
 
 type PaginationEffect token effect page  = TransitionEffect (Maybe token) effect page
