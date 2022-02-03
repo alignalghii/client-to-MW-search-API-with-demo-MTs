@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module InterpretJSON (JSONResponseObject, Title, Sroffset, extractFoundTitlesAndSroffset) where
+module Service.InterpretJSON (JSONResponseObject, Title, Sroffset, extractFoundTitlesAndSroffset) where
 
-import SearchResult (SearchResult, Title, Sroffset)
+import Service.SearchResult (SearchResult, Title, Sroffset)
 
 import Data.Aeson.Types (parseMaybe, (.:), Object, FromJSON)
 import qualified Data.Maybe as Myb (mapMaybe) -- Aeson overwrites `mapMaybe`, but we need the original (Prelude) variant!

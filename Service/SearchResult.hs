@@ -1,4 +1,4 @@
-module SearchResult (SearchResult, Title, Sroffset, showSearchResult) where
+module Service.SearchResult (SearchResult, Title, Sroffset, showSearchResult) where
 
 import Control.Arrow ((***))
 

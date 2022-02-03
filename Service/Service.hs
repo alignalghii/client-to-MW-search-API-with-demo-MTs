@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Service (Service, callService) where
+module Service.Service (Service, callService) where
 
-import InterpretJSON (JSONResponseObject)
+import Service.InterpretJSON (JSONResponseObject)
 
 import Network.Wreq (get, responseBody)
 import Control.Lens ((^.))

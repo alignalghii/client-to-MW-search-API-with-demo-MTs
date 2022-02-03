@@ -1,4 +1,4 @@
-module Url where
+module Service.Url where
 
 
 baseURL :: String

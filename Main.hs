@@ -1,7 +1,7 @@
 module Main (main) where
 
 import System.Console.GetOpt
-import WebServiceConsultation (runSearchFirstPage)
+import Service.WebServiceConsultation (runSearchFirstPage)
 
 import Test.Hspec (hspec)
 import qualified Effectless.PaginationConceptSeriesSpec as EffectlessSpecs (spec)

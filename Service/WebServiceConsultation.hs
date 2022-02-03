@@ -1,9 +1,9 @@
-module WebServiceConsultation (runSearchFirstPage) where
+module Service.WebServiceConsultation (runSearchFirstPage) where
 
-import Service (Service, callService)
-import SearchResult (SearchResult, showSearchResult)
-import InterpretJSON (JSONResponseObject, Title, Sroffset, extractFoundTitlesAndSroffset)
-import Url (searchURL)
+import Service.Service (Service, callService)
+import Service.SearchResult (SearchResult, showSearchResult)
+import Service.InterpretJSON (JSONResponseObject, Title, Sroffset, extractFoundTitlesAndSroffset)
+import Service.Url (searchURL)
 
 
 runSearchFirstPage :: String -> IO ()
