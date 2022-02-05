@@ -1,7 +1,7 @@
 module Main (main) where
 
 import System.Console.GetOpt
-import Service.WebServiceConsultation (runSearchFirstPage, runSearchPaged, runSearchInteract)
+import Service.WebServiceConsultation (runSearchFirstPage, runSearchPaged, runSearchPaged', runSearchInteract)
 
 import Test.Hspec (hspec)
 import qualified Effectless.PaginationConceptSeriesSpec as EffectlessSpecs (spec)
@@ -30,7 +30,7 @@ optGrammar = [
 processOpts :: ([Flag], [String], [String]) -> IO ()
 processOpts ([Test]                , []    ,     [] ) = runTest
 processOpts ([SearchService expr]  , []    ,     [] ) = runSearchFirstPage expr
-processOpts ([PagedService expr]   , []    ,     [] ) = runSearchPaged expr
+processOpts ([PagedService expr]   , []    ,     [] ) = runSearchPaged' expr
 processOpts ([InteractService expr], []    ,     [] ) = runSearchInteract expr
 processOpts ([Help]              , []    ,     []   ) = runHelp
 processOpts ([_]                 , _:_   ,     []   ) = putStrLn "Non-option arguments cannot be used" >> runHelp
