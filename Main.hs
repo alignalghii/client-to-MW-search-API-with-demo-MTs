@@ -1,7 +1,7 @@
 module Main (main) where
 
 import System.Console.GetOpt
-import Service.WebServiceConsultation (runSearchFirstPage)
+import Service.WebServiceConsultation (runSearchFirstPage, runSearchPaged, runSearchInteract)
 
 import Test.Hspec (hspec)
 import qualified Effectless.PaginationConceptSeriesSpec as EffectlessSpecs (spec)
@@ -16,18 +16,22 @@ main = getArgs >>= processArgs
 processArgs :: [String] -> IO ()
 processArgs = processOpts . getOpt Permute optGrammar
 
-data Flag = SearchService String | Test | Help
+data Flag = Help | Test | SearchService String | PagedService String | InteractService String
 
 optGrammar :: [OptDescr Flag]
 optGrammar = [
-                 Option "S"  ["search", "service"] (ReqArg SearchService "<EXPR>") " # Consult with Wikipedia's search service: search for <EXPR>",
                  Option "t"  ["test"             ] (NoArg Test)                    " # Run unit tests",
-                 Option "h?" ["help"             ] (NoArg Help)                    " # Info about the command-line interface (flags, options)"
+                 Option "h?" ["help"             ] (NoArg Help)                    " # Info about the command-line interface (flags, options)",
+                 Option "S"  ["search", "service"] (ReqArg SearchService   "<EXPR>") " # Consult MediaWiki API's search: 1st page of results for <EXPR>",
+                 Option "p"  ["pager", "paginate"] (ReqArg PagedService    "<EXPR>") " # Consult MediaWiki API's search: paginated results for <EXPR>",
+                 Option "i"  ["interactive"      ] (ReqArg InteractService "<EXPR>") " # Consult MediaWiki API's search: interactive paging for <EXPR>"
              ]
 
 processOpts :: ([Flag], [String], [String]) -> IO ()
-processOpts ([Test]              , []    ,     []   ) = runTest
-processOpts ([SearchService expr], []    ,     []   ) = runSearchFirstPage expr
+processOpts ([Test]                , []    ,     [] ) = runTest
+processOpts ([SearchService expr]  , []    ,     [] ) = runSearchFirstPage expr
+processOpts ([PagedService expr]   , []    ,     [] ) = runSearchPaged expr
+processOpts ([InteractService expr], []    ,     [] ) = runSearchInteract expr
 processOpts ([Help]              , []    ,     []   ) = runHelp
 processOpts ([_]                 , _:_   ,     []   ) = putStrLn "Non-option arguments cannot be used" >> runHelp
 processOpts ([]                  , [expr],     []   ) = putStrLn ("Interpreting as abbrev for `--search <EXPR>") >> runSearchFirstPage expr
