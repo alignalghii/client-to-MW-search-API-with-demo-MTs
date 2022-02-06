@@ -1,4 +1,4 @@
-module Service.WebServiceConsultation (runSearchFirstPage, runSearchPaged, runSearchPaged', runSearchInteract) where
+module Service.WebServiceConsultation (runSearchFirstPage, runSearchPaged, runSearchPaged', runSearchSlideshow) where
 
 import Service.Service (Service, callService)
 import Service.SearchResult (showSearchResult, actSearchResult)
@@ -7,9 +7,12 @@ import Service.Url (searchURL)
 
 import Control.Pagination (PaginationEffect)
 import Effectful.PaginationConceptSeries (pagination_noMT)
+import Effectful.PaginationConcept_lazy (pagination_MT_lazy)
+import Control.Monad.State.Lazy (StateT (StateT))
 
 import Data.Maybe (isJust)
 import Control.Monad (when, void)
+import Control.Concurrent (threadDelay)
 
 
 runSearchFirstPage :: String -> IO ()
@@ -17,12 +20,16 @@ runSearchFirstPage searchphrase = do
     putStrLn $ "Service: first-page of search result for searchphase `" ++ searchphrase ++ "'"
     wrapper callService searchphrase Nothing >>= (putStrLn . showSearchResult)
 
-wrapper :: Service -> String -> PaginationEffect Sroffset IO [Title]
-wrapper service searchphrase maybeSroffset = build <$> service (searchURL searchphrase maybeSroffset)
+wrapper, wrapperD :: Service -> String -> PaginationEffect Sroffset IO [Title]
+wrapper  service searchphrase maybeSroffset = build <$> service (searchURL searchphrase maybeSroffset)
+wrapperD service searchphrase maybeSroffset = do
+    x <- build <$> service (searchURL searchphrase maybeSroffset)
+    threadDelay 5000000
+    return x
 
 
 runSearchPaged :: String -> IO ()
-runSearchPaged = runSearchPagedWith (\phrase -> "Service: paginated search result for searchphase `" ++ phrase ++ "'") getLine -- (\ a -> getLine >> print a)
+runSearchPaged = runSearchPagedWith (\phrase -> "Service: paginated search result for searchphase `" ++ phrase ++ "'") getLine -- (\ a -> getLine >> print a)https://www.gyakorikerdesek.hu/altalad-megvalaszolt-kerdesek
 
 runSearchPagedWith :: (String -> String) -> IO a -> String -> IO ()
 runSearchPagedWith info delay searchphrase = do
@@ -41,6 +48,17 @@ wrapper' service searchphrase maybeSroffset = (actSearchResult . build) =<< serv
 build :: Maybe JSONResponseObject -> ([Title], Maybe Sroffset)
 build = maybe ([], Nothing) extractFoundTitlesAndSroffset
 -- Code smell: don't hide service call errors! Redesign, or at least extend the monad transformer stack.
+
+{--
+runSearchPaged_MT_lazy :: String -> IO ()
+runSearchPaged_MT_lazy searchphrase = do
+    pagination_MT_lazy $ wrapper' callService searchphrase
+--}
+
+runSearchSlideshow :: String -> IO ()
+runSearchSlideshow searchphrase = do
+    x <- pagination_MT_lazy $ StateT $ wrapperD callService searchphrase
+    print x
 
 {--
 runSearchPagedWith' :: (String -> String) -> (Maybe JSONResponseObject -> IO ()) -> String -> IO ()

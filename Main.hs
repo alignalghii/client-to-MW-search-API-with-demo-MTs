@@ -1,11 +1,13 @@
 module Main (main) where
 
 import System.Console.GetOpt
-import Service.WebServiceConsultation (runSearchFirstPage, runSearchPaged, runSearchPaged', runSearchInteract)
+import Service.WebServiceConsultation (runSearchFirstPage, runSearchPaged, runSearchPaged', runSearchSlideshow)
 
 import Test.Hspec (hspec)
 import qualified Effectless.PaginationConceptSeriesSpec as EffectlessSpecs (spec)
 import qualified Effectful.PaginationConceptSeriesSpec  as EffectfulSpecs  (spec)
+
+import LazinessDemo (runLazinessDemo)
 
 import System.Environment (getProgName, getArgs, withArgs)
 
@@ -16,25 +18,27 @@ main = getArgs >>= processArgs
 processArgs :: [String] -> IO ()
 processArgs = processOpts . getOpt Permute optGrammar
 
-data Flag = Help | Test | SearchService String | PagedService String | InteractService String
+data Flag = Help | UnitTests | LazinessDemo | SearchService String | PagedService String | SlideService String
 
 optGrammar :: [OptDescr Flag]
 optGrammar = [
-                 Option "t"  ["test"             ] (NoArg Test)                    " # Run unit tests",
-                 Option "h?" ["help"             ] (NoArg Help)                    " # Info about the command-line interface (flags, options)",
-                 Option "S"  ["search", "service"] (ReqArg SearchService   "<EXPR>") " # Consult MediaWiki API's search: 1st page of results for <EXPR>",
-                 Option "p"  ["pager", "paginate"] (ReqArg PagedService    "<EXPR>") " # Consult MediaWiki API's search: paginated results for <EXPR>",
-                 Option "i"  ["interactive"      ] (ReqArg InteractService "<EXPR>") " # Consult MediaWiki API's search: interactive paging for <EXPR>"
+                 Option "h?" ["help"              ] (NoArg Help)                    " # Info about the command-line interface (flags, options)",
+                 Option "t"  ["test"              ] (NoArg UnitTests)               " # Run unit tests",
+                 Option "dl" ["demo"  , "lazyness"] (NoArg LazinessDemo)            " # Run special unit tests for demonstarting the limits of lazyness",
+                 Option "S"  ["search", "service" ] (ReqArg SearchService "<EXPR>") " # Consult MediaWiki API's search: 1st page of results for <EXPR>",
+                 Option "p"  ["pager" , "paginate"] (ReqArg PagedService  "<EXPR>") " # Consult MediaWiki API's search: paginated results for <EXPR>",
+                 Option "s"  ["slide" , "show"    ] (ReqArg SlideService  "<EXPR>") " # Consult MediaWiki API's search: delayed slideshow forr <EXPR>"
              ]
 
 processOpts :: ([Flag], [String], [String]) -> IO ()
-processOpts ([Test]                , []    ,     [] ) = runTest
-processOpts ([SearchService expr]  , []    ,     [] ) = runSearchFirstPage expr
-processOpts ([PagedService expr]   , []    ,     [] ) = runSearchPaged' expr
-processOpts ([InteractService expr], []    ,     [] ) = runSearchInteract expr
+processOpts ([UnitTests]         , []    ,     []   ) = runTest
+processOpts ([LazinessDemo]      , []    ,     []   ) = runLazinessDemo
+processOpts ([SearchService expr], []    ,     []   ) = runSearchFirstPage expr
+processOpts ([PagedService expr] , []    ,     []   ) = runSearchPaged' expr
+processOpts ([SlideService expr] , []    ,     []   ) = runSearchSlideshow expr
 processOpts ([Help]              , []    ,     []   ) = runHelp
 processOpts ([_]                 , _:_   ,     []   ) = putStrLn "Non-option arguments cannot be used" >> runHelp
-processOpts ([]                  , [expr],     []   ) = putStrLn ("Interpreting as abbrev for `--search <EXPR>") >> runSearchFirstPage expr
+processOpts ([]                  , [expr],     []   ) = putStrLn ("Interpreting as abbrev for `--paginate <EXPR>") >> runSearchPaged' expr
 processOpts ([]                  , []    ,     []   ) = putStrLn "Interpreting as abbrev for `--help`" >> runHelp
 processOpts ([]                  , _:_:_ ,     []   ) = putStrLn "Non-option arguments cannot be used" >> runHelp
 processOpts (_                   , _     , err@(_:_)) = mapM_ putStr err >> runHelp
