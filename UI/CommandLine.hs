@@ -2,9 +2,9 @@ module UI.CommandLine (Flag, argOrder, optGrammar, processOpts) where
 
 import Service.WebServiceConsultation (runSearchFirstPage, runSearchPaged', runSearchSlideshow)
 
-import MetaInfo.Help         (runHelp)
-import MetaInfo.UnitTest     (runTest)
-import MetaInfo.LazinessDemo (runLazinessDemo)
+import MetaFeatures.Help         (runHelp)
+import MetaFeatures.UnitTest     (runTest)
+import MetaFeatures.LazinessDemo (runLazinessDemo)
 
 import System.Console.GetOpt (ArgOrder (Permute), OptDescr (Option), ArgDescr (NoArg, ReqArg))
 

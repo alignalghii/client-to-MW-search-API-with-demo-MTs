@@ -1,4 +1,4 @@
-module MetaInfo.UnitTest where
+module MetaFeatures.UnitTest where
 
 import qualified PaginationStateMachines.Effectless.PaginationConceptSeriesSpec as EffectlessSpecs (spec)
 import qualified PaginationStateMachines.Effectful.PaginationConceptSeriesSpec  as EffectfulSpecs  (spec)

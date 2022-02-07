@@ -1,4 +1,4 @@
-module MetaInfo.LazinessDemo (runLazinessDemo) where
+module MetaFeatures.LazinessDemo (runLazinessDemo) where
 
 import Control.Monad.State.Lazy (State, StateT, evalState, evalStateT, get, put)
 import Control.Monad.Identity (Identity)

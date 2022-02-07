@@ -1,4 +1,4 @@
-module MetaInfo.Help (runHelp) where
+module MetaFeatures.Help (runHelp) where
 
 import System.Console.GetOpt (OptDescr, usageInfo)
 import System.Environment (getProgName)
