@@ -1,4 +1,4 @@
-module Service.WebServiceConsultation (runSearchFirstPage, runSearchPaged, runSearchPaged', runSearchSlideshow) where
+module Service.WebServiceConsultation (runSearchFirstPage, runSearchPaged', runSearchSlideshow) where
 
 import Service.Service (Service, callService)
 import Service.SearchResult (showSearchResult, actSearchResult)
