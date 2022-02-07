@@ -1,5 +1,7 @@
 *.hi
 *.o
-Main
 *obsolete*
 *.backup
+
+# exec:
+search-client-MW-demo-MTs
