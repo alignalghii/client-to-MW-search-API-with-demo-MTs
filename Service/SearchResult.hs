@@ -28,12 +28,9 @@ actContinuationIfAny :: Maybe Sroffset -> IO (Maybe Sroffset)
 actContinuationIfAny ms = maybe (putStrLn "No more items." >> return Nothing) confirmContinuationToken ms
 
 confirmContinuationToken :: Sroffset -> IO (Maybe Sroffset)
-confirmContinuationToken tok = putStrLn ("Press ENTER to continue (continuation token: " ++ show tok ++ ")...") >>  getLine >>= (return . flip interpretContinuation tok)
+confirmContinuationToken tok = putStrLn ("Type `y' or `yes' to continue search, anything else (or a single ENTER) to cancel! (Continuation token: " ++ show tok ++ ")") >>  getLine >>= (return . flip interpretContinuation tok)
 
 interpretContinuation :: String -> Sroffset -> Maybe Sroffset
-interpretContinuation "n"   = const Nothing
-interpretContinuation "no"  = const Nothing
-interpretContinuation ""    = Just
 interpretContinuation "y"   = Just
 interpretContinuation "yes" = Just
-interpretContinuation _     = Just
+interpretContinuation _     = const Nothing
