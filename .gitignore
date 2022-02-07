@@ -4,4 +4,4 @@
 *.backup
 
 # exec:
-search-client-MW-demo-MTs
+client-to-MW-search-API-with-demo-MTs
