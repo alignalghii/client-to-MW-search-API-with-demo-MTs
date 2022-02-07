@@ -1,4 +1,4 @@
-module Effectful.PaginationConcept_lazy (pagination_MT_lazy) where
+module PaginationStateMachines.Effectful.PaginationConcept_lazy (pagination_MT_lazy) where
 
 import Control.Pagination_lazy (PaginationStateT)
 

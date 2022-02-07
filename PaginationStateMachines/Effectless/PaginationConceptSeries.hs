@@ -1,4 +1,4 @@
-module Effectless.PaginationConceptSeries (infinite_pagination, pagination_nonDRY, pagination_TF, pagination_SM) where
+module PaginationStateMachines.Effectless.PaginationConceptSeries (infinite_pagination, pagination_nonDRY, pagination_TF, pagination_SM) where
 
 import Control.Transition (Transition)
 import Control.Pagination (PaginationTransition, PaginationState)

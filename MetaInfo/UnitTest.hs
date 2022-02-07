@@ -1,7 +1,7 @@
 module MetaInfo.UnitTest where
 
-import qualified Effectless.PaginationConceptSeriesSpec as EffectlessSpecs (spec)
-import qualified Effectful.PaginationConceptSeriesSpec  as EffectfulSpecs  (spec)
+import qualified PaginationStateMachines.Effectless.PaginationConceptSeriesSpec as EffectlessSpecs (spec)
+import qualified PaginationStateMachines.Effectful.PaginationConceptSeriesSpec  as EffectfulSpecs  (spec)
 
 import Test.Hspec (hspec)
 import System.Environment (withArgs)

@@ -1,7 +1,7 @@
-module Effectless.PaginationConceptSeriesSpec (spec) where
+module PaginationStateMachines.Effectless.PaginationConceptSeriesSpec (spec) where
 
 import Test.Hspec (Spec, describe, it, shouldBe)
-import Effectless.PaginationConceptSeries (infinite_pagination, pagination_nonDRY, pagination_TF, pagination_SM)
+import PaginationStateMachines.Effectless.PaginationConceptSeries (infinite_pagination, pagination_nonDRY, pagination_TF, pagination_SM)
 import Control.Monad.State.Strict (StateT (StateT), runStateT, state, get, put)
 
 import Control.Transition (Transition)

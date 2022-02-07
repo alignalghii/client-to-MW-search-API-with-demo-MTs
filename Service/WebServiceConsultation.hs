@@ -6,8 +6,8 @@ import Service.InterpretJSON (JSONResponseObject, Title, Sroffset, extractFoundT
 import Service.Url (searchURL)
 
 import Control.Pagination (PaginationEffect)
-import Effectful.PaginationConceptSeries (pagination_noMT)
-import Effectful.PaginationConcept_lazy (pagination_MT_lazy)
+import PaginationStateMachines.Effectful.PaginationConceptSeries (pagination_noMT)
+import PaginationStateMachines.Effectful.PaginationConcept_lazy (pagination_MT_lazy)
 import Control.Monad.State.Lazy (StateT (StateT))
 
 import Data.Maybe (isJust)

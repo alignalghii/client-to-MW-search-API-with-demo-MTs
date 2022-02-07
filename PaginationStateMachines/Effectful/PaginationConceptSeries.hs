@@ -1,4 +1,4 @@
-module Effectful.PaginationConceptSeries (pagination_noMT, pagination_MT) where
+module PaginationStateMachines.Effectful.PaginationConceptSeries (pagination_noMT, pagination_MT) where
 
 import Control.Pagination (PaginationEffect, PaginationStateT)
 
