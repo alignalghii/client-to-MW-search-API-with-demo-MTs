@@ -20,12 +20,12 @@ argOrder = Permute
 
 optGrammar :: [OptDescr Flag]
 optGrammar = [
-                 Option "h?" ["help"              ] (NoArg Help)                    " # Info about the command-line interface (flags, options)",
-                 Option "t"  ["test"              ] (NoArg UnitTests)               " # Run unit tests",
-                 Option "dl" ["demo"  , "laziness"] (NoArg LazinessDemo)            " # Run special unit tests for demonstarting the limits of laziness",
-                 Option "S"  ["search", "service" ] (ReqArg SearchService "<EXPR>") " # Consult MediaWiki API's search: 1st page of results for <EXPR>",
-                 Option "p"  ["pager" , "paginate"] (ReqArg PagedService  "<EXPR>") " # Consult MediaWiki API's search: paginated results for <EXPR>",
-                 Option "s"  ["slide" , "show"    ] (ReqArg SlideService  "<EXPR>") " # Consult MediaWiki API's search: delayed slideshow forr <EXPR>"
+                 Option "h?" ["help"              ] (NoArg Help)                    " ... Info about the command-line interface (flags, options)",
+                 Option "t"  ["test"              ] (NoArg UnitTests)               " ... Run unit tests for the programs's main logic part: the pagination state machines (transition functions, monads, monad transformers)",
+                 Option "dl" ["demo"  , "laziness"] (NoArg LazinessDemo)            " ... Run special unit tests for demonstarting the limits of laziness",
+                 Option "S"  ["search", "service" ] (ReqArg SearchService "<EXPR>") " ... Consult MediaWiki API's search: 1st page of results for <EXPR> (i.e. the first ten items)",
+                 Option "p"  ["pager" , "paginate"] (ReqArg PagedService  "<EXPR>") " ... Consult MediaWiki API's search: paginated results for <EXPR> (interactive pagination)",
+                 Option "s"  ["slide" , "show"    ] (ReqArg SlideService  "<EXPR>") " ... Consult MediaWiki API's search: delayed slideshow forr <EXPR>"
              ]
 
 -- Semantics:
