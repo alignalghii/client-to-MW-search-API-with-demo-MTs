@@ -1,4 +1,4 @@
-module Service.WebServiceConsultation (searchMessage, runSearchFirstPage', runSearchPaged') where
+module Service.WebServiceConsultation (searchMessage, runSearchFirstPage, runSearchPaged) where
 
 
 import Service.ServiceHigh (printHigh, showHigh, serviceHigh, serviceHigh_withMockBase)
@@ -17,14 +17,14 @@ searchMessage :: URL -> SearchPhrase -> IO String
 searchMessage mockBaseURL searchphrase = showHigh <$> (runMaybeT $ serviceHigh_withMockBase mockBaseURL searchphrase Nothing)
 
 
-runSearchFirstPage' :: SearchPhrase -> IO ()
-runSearchFirstPage' searchphrase = do
+runSearchFirstPage :: SearchPhrase -> IO ()
+runSearchFirstPage searchphrase = do
     putStrLn $ "Service: first-page of search result for searchphase `" ++ searchphrase ++ "'"
     printHigh $ serviceHigh searchphrase Nothing
 
 
-runSearchPaged' :: SearchPhrase -> IO ()
-runSearchPaged' searchphrase = do
+runSearchPaged :: SearchPhrase -> IO ()
+runSearchPaged searchphrase = do
     putStrLn $ "Service: first-page of search result for searchphase `" ++ searchphrase ++ "'"
     pagination_noMT $ wrapper' theServiceLow_lengthy searchphrase
     return ()

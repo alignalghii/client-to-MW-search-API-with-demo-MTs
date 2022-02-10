@@ -1,6 +1,6 @@
 module UI.CommandLine (Flag, argOrder, optGrammar, processOpts) where
 
-import Service.WebServiceConsultation (runSearchFirstPage', runSearchPaged')
+import Service.WebServiceConsultation (runSearchFirstPage, runSearchPaged)
 
 import MetaFeatures.Help         (runHelp)
 import MetaFeatures.UnitTest        (runUnitTests)
@@ -35,11 +35,11 @@ processOpts :: ([Flag], [String], [String]) -> IO ()
 processOpts ([UnitTests]         , []    ,     []   ) = runUnitTests
 processOpts ([IntegrationTests]  , []    ,     []   ) = runIntegrationTests
 processOpts ([LazinessDemo]      , []    ,     []   ) = runLazinessDemo
-processOpts ([SearchService expr], []    ,     []   ) = runSearchFirstPage' expr
-processOpts ([PagedService expr] , []    ,     []   ) = runSearchPaged' expr
+processOpts ([SearchService expr], []    ,     []   ) = runSearchFirstPage expr
+processOpts ([PagedService expr] , []    ,     []   ) = runSearchPaged expr
 processOpts ([Help]              , []    ,     []   ) = runHelp  optGrammar
 processOpts ([_]                 , _:_   ,     []   ) = putStrLn "Non-option arguments cannot be used" >> runHelp optGrammar
-processOpts ([]                  , [expr],     []   ) = putStrLn ("Interpreting as abbrev for `--paginate <EXPR>") >> runSearchPaged' expr
+processOpts ([]                  , [expr],     []   ) = putStrLn ("Interpreting as abbrev for `--paginate <EXPR>") >> runSearchPaged expr
 processOpts ([]                  , []    ,     []   ) = putStrLn "Interpreting as abbrev for `--help`" >> runHelp optGrammar
 processOpts ([]                  , _:_:_ ,     []   ) = putStrLn "Non-option arguments cannot be used" >> runHelp optGrammar
 processOpts (_                   , _     , err@(_:_)) = mapM_ putStr err >> runHelp optGrammar
