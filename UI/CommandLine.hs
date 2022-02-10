@@ -1,6 +1,6 @@
 module UI.CommandLine (Flag, argOrder, optGrammar, processOpts) where
 
-import Service.WebServiceConsultation (runSearchFirstPage, runSearchPaged', runSearchSlideshow)
+import Service.WebServiceConsultation (runSearchFirstPage', runSearchPaged', runSearchSlideshow)
 
 import MetaFeatures.Help         (runHelp)
 import MetaFeatures.UnitTest     (runTest)
@@ -33,7 +33,7 @@ optGrammar = [
 processOpts :: ([Flag], [String], [String]) -> IO ()
 processOpts ([UnitTests]         , []    ,     []   ) = runTest
 processOpts ([LazinessDemo]      , []    ,     []   ) = runLazinessDemo
-processOpts ([SearchService expr], []    ,     []   ) = runSearchFirstPage expr
+processOpts ([SearchService expr], []    ,     []   ) = runSearchFirstPage' expr
 processOpts ([PagedService expr] , []    ,     []   ) = runSearchPaged' expr
 processOpts ([SlideService expr] , []    ,     []   ) = runSearchSlideshow expr
 processOpts ([Help]              , []    ,     []   ) = runHelp  optGrammar

@@ -1,6 +1,8 @@
-module Service.WebServiceConsultation (runSearchFirstPage, runSearchPaged', runSearchSlideshow) where
+module Service.WebServiceConsultation (runSearchFirstPage, runSearchFirstPage', runSearchPaged', runSearchSlideshow) where
 
-import Service.Service (Service, callService)
+import Service.ServiceHigh (printHigh, abstractFromLowRepresentation)
+
+import Service.Service (Service, callService, Service', callService', serviceFormatErrorMsg)
 import Service.SearchResult (showSearchResult, actSearchResult)
 import Service.InterpretJSON (JSONResponseObject, Title, Sroffset, extractFoundTitlesAndSroffset)
 import Service.Url (searchURL)
@@ -14,6 +16,9 @@ import Data.Maybe (isJust)
 import Control.Monad (when, void)
 import Control.Concurrent (threadDelay)
 
+import Control.Monad.Trans.Class (lift)
+import Control.Monad.Trans.Maybe (MaybeT, runMaybeT)
+
 
 runSearchFirstPage :: String -> IO ()
 runSearchFirstPage searchphrase = do
@@ -26,6 +31,12 @@ wrapperD service searchphrase maybeSroffset = do
     x <- build <$> service (searchURL searchphrase maybeSroffset)
     threadDelay 5000000
     return x
+
+runSearchFirstPage' :: String -> IO ()
+runSearchFirstPage' searchphrase = do
+    putStrLn $ "Service: first-page of search result for searchphase `" ++ searchphrase ++ "'"
+    printHigh $ abstractFromLowRepresentation searchphrase
+
 
 
 runSearchPaged :: String -> IO ()

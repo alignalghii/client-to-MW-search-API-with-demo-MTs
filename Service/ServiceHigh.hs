@@ -1,0 +1,27 @@
+module Service.ServiceHigh (printHigh, abstractFromLowRepresentation) where -- rename `Service.Service` to `Service.ServiceLow`
+
+import Control.Pagination (PaginationEffect)
+import Service.Service (Service', callService', serviceFormatErrorMsg)
+import Service.Url (searchURL)
+import Service.SearchResult (SearchResult, showSearchResult, Title, Sroffset)
+import Service.InterpretJSON (extractFoundTitlesAndSroffset)
+import Control.Monad.Trans.Maybe (MaybeT, runMaybeT)
+
+
+printHigh :: MaybeT IO SearchResult -> IO ()
+printHigh = (=<<) (putStrLn . showHigh) . runMaybeT
+
+showHigh :: Maybe SearchResult -> String
+showHigh = maybe serviceFormatErrorMsg showSearchResult
+
+abstractFromLowRepresentation :: String -> MaybeT IO SearchResult -- -> MaybeT IO SearchResult
+abstractFromLowRepresentation searchphrase = abstractFromLowRepresentation' callService' searchphrase Nothing
+
+abstractFromLowRepresentation' :: Service' -> String -> PaginationEffect Sroffset (MaybeT IO) [Title]
+abstractFromLowRepresentation' service' searchphrase = fmap extractFoundTitlesAndSroffset . service' . searchURL searchphrase
+--    jsonResponseObject <- service' $ searchURL searchphrase maybeSroffset
+--    return $ extractFoundTitlesAndSroffset jsonResponseObject
+-- MaybeT . fmap (fmap extractFoundTitlesAndSroffset) . service . searchURL searchphrase
+-- wrapperE service searchphrase maybeSroffset = do
+--     maybeJsonResponseObject <- lift $ service $ searchURL searchphrase maybeSroffset
+--     MaybeT $ return $ fmap extractFoundTitlesAndSroffset maybeJsonResponseObjectSroffset

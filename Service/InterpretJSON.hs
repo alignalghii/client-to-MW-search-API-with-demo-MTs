@@ -21,7 +21,7 @@ extractFoundTitlesAndSroffset = titlesInRootObject &&& maybeSroffsetInRootObject
 titlesInRootObject :: JSONResponseObject -> [Title]
 titlesInRootObject = maybe [] (multiselect "title") . (select "search" <=< select "query")
 
-maybeSroffsetInRootObject :: Object -> Maybe Sroffset
+maybeSroffsetInRootObject :: JSONResponseObject -> Maybe Sroffset
 maybeSroffsetInRootObject = select "sroffset" <=< select "continue"
 
 -- maybeSelectPath :: FromJSON b => [Text] -> Object -> Maybe b
