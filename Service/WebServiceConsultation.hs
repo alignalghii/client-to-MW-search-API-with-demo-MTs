@@ -4,7 +4,7 @@ import Service.ServiceHigh (printHigh, abstractFromLowRepresentation, abstractFr
 
 
 import Service.ServiceHigh (showHigh, abstractFromLowRepresentation, abstractFromLowRepresentation_withMockBase)
-import Service.ServiceLow (Service, callService, Service', callService', serviceFormatErrorMsg)
+import Service.ServiceLow (ServiceLow, theServiceLow, ServiceLow', theServiceLow', serviceFormatErrorMsg)
 import Service.SearchResult (showSearchResult, actSearchResult)
 import Service.InterpretJSON (JSONResponseObject, Title, Sroffset, extractFoundTitlesAndSroffset)
 import Service.Url (URL, searchURL)
@@ -28,9 +28,9 @@ searchMessage mockBaseURL searchphrase = showHigh <$> (runMaybeT $ abstractFromL
 runSearchFirstPage :: String -> IO ()
 runSearchFirstPage searchphrase = do
     putStrLn $ "Service: first-page of search result for searchphase `" ++ searchphrase ++ "'"
-    wrapper callService searchphrase Nothing >>= (putStrLn . showSearchResult)
+    wrapper theServiceLow searchphrase Nothing >>= (putStrLn . showSearchResult)
 
-wrapper, wrapperD :: Service -> String -> PaginationEffect Sroffset IO [Title]
+wrapper, wrapperD :: ServiceLow -> String -> PaginationEffect Sroffset IO [Title]
 wrapper  service searchphrase maybeSroffset = build <$> service (searchURL searchphrase maybeSroffset)
 wrapperD service searchphrase maybeSroffset = do
     x <- build <$> service (searchURL searchphrase maybeSroffset)
@@ -50,15 +50,15 @@ runSearchPaged = runSearchPagedWith (\phrase -> "Service: paginated search resul
 runSearchPagedWith :: (String -> String) -> IO a -> String -> IO ()
 runSearchPagedWith info delay searchphrase = do
     putStrLn $ info searchphrase
-    pagination_noMT (wrapper (flip postdelay delay . callService) searchphrase) >>= print
+    pagination_noMT (wrapper (flip postdelay delay . theServiceLow) searchphrase) >>= print
 
 runSearchPaged' :: String -> IO ()
 runSearchPaged' searchphrase = do
     putStrLn $ "Service: first-page of search result for searchphase `" ++ searchphrase ++ "'"
-    pagination_noMT $ wrapper' callService searchphrase
+    pagination_noMT $ wrapper' theServiceLow searchphrase
     return ()
 
-wrapper' :: Service -> String -> PaginationEffect Sroffset IO [Title]
+wrapper' :: ServiceLow -> String -> PaginationEffect Sroffset IO [Title]
 wrapper' service searchphrase maybeSroffset = (actSearchResult . build) =<< service (searchURL searchphrase maybeSroffset)
 
 build :: Maybe JSONResponseObject -> ([Title], Maybe Sroffset)
@@ -68,19 +68,19 @@ build = maybe ([], Nothing) extractFoundTitlesAndSroffset
 {--
 runSearchPaged_MT_lazy :: String -> IO ()
 runSearchPaged_MT_lazy searchphrase = do
-    pagination_MT_lazy $ wrapper' callService searchphrase
+    pagination_MT_lazy $ wrapper' theServiceLow searchphrase
 --}
 
 runSearchSlideshow :: String -> IO ()
 runSearchSlideshow searchphrase = do
-    x <- pagination_MT_lazy $ StateT $ wrapperD callService searchphrase
+    x <- pagination_MT_lazy $ StateT $ wrapperD theServiceLow searchphrase
     print x
 
 {--
 runSearchPagedWith' :: (String -> String) -> (Maybe JSONResponseObject -> IO ()) -> String -> IO ()
 runSearchPagedWith' info delay searchphrase = do
     putStrLn $ info searchphrase
-    pagination_noMT $ wrapper' (\url -> callService url >>= delay) searchphrase
+    pagination_noMT $ wrapper' (\url -> theServiceLow url >>= delay) searchphrase
     return ()
 
 --wrapper' :: (String -> IO a) -> String -> PaginationEffect Sroffset IO [Title]

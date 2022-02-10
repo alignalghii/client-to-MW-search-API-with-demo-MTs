@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Service.ServiceLow (Service_unsafe, callService_unsafe, serviceFormatErrorMsg, Service, callService, Service', callService') where
+module Service.ServiceLow (ServiceLow_unsafe, theServiceLow_unsafe, serviceFormatErrorMsg, ServiceLow, theServiceLow, ServiceLow', theServiceLow') where
 
 import Service.InterpretJSON (JSONResponseObject)
 
@@ -19,10 +19,10 @@ import Control.Monad.Trans.Maybe (MaybeT (MaybeT))
 -- unsafe (partial)
 --
 
-type Service_unsafe = String -> IO JSONResponseObject
+type ServiceLow_unsafe = String -> IO JSONResponseObject
 
-callService_unsafe :: Service_unsafe
-callService_unsafe = fmap (fromMaybe $ error serviceFormatErrorMsg) . callService
+theServiceLow_unsafe :: ServiceLow_unsafe
+theServiceLow_unsafe = fmap (fromMaybe $ error serviceFormatErrorMsg) . theServiceLow
 
 ---
 -- Total ones:
@@ -34,10 +34,10 @@ serviceFormatErrorMsg      = "The target service responds in an incompatible for
 serviceUnspecifiedErrorMsg = "Unspecified service error. Either: " ++ serviceConnectionErrorMsg ++ ". Or: " ++ serviceFormatErrorMsg ++ "."
 
 --lengthy (total, but without the monad transformer formalism)
-type Service = String -> IO (Maybe JSONResponseObject)
+type ServiceLow = String -> IO (Maybe JSONResponseObject)
 
-callService :: Service
-callService url = do
+theServiceLow :: ServiceLow
+theServiceLow url = do
     resp <- get url
     let rawBody = resp ^. responseBody
     let maybeJsonObject = decode rawBody
@@ -45,7 +45,7 @@ callService url = do
 
 
 -- modular (total, and with with the monad transformer formalism)
-type Service' = String -> MaybeT IO JSONResponseObject
+type ServiceLow' = String -> MaybeT IO JSONResponseObject
 
-callService' :: Service'
-callService' =  MaybeT . callService -- = lift . callService_unsafe
+theServiceLow' :: ServiceLow'
+theServiceLow' =  MaybeT . theServiceLow -- = lift . theServiceLow_unsafe
