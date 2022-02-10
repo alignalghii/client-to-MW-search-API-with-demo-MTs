@@ -1,7 +1,7 @@
 module Service.WebServiceConsultation (searchMessage, runSearchFirstPage', runSearchPaged') where
 
 
-import Service.ServiceHigh (printHigh, showHigh, serviceHigh', serviceHigh_withMockBase)
+import Service.ServiceHigh (printHigh, showHigh, serviceHigh, serviceHigh_withMockBase)
 import Service.ServiceLow (ServiceLow_lengthy, theServiceLow_lengthy, ServiceLow, theServiceLow, serviceFormatErrorMsg)
 import Service.SearchResult (showSearchResult, actSearchResult)
 import Service.InterpretJSON (JSONResponseObject, Title, Sroffset, extractFoundTitlesAndSroffset)
@@ -20,7 +20,7 @@ searchMessage mockBaseURL searchphrase = showHigh <$> (runMaybeT $ serviceHigh_w
 runSearchFirstPage' :: SearchPhrase -> IO ()
 runSearchFirstPage' searchphrase = do
     putStrLn $ "Service: first-page of search result for searchphase `" ++ searchphrase ++ "'"
-    printHigh $ serviceHigh' searchphrase Nothing
+    printHigh $ serviceHigh searchphrase Nothing
 
 
 runSearchPaged' :: SearchPhrase -> IO ()

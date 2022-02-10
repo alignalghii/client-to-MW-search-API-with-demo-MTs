@@ -1,4 +1,4 @@
-module Service.ServiceHigh (printHigh, showHigh, serviceHigh, serviceHigh', serviceHigh_withMockBase) where
+module Service.ServiceHigh (printHigh, showHigh, serviceHigh, serviceHigh_withMockBase) where
 
 import Control.Pagination (PaginationEffect)
 import Service.ServiceLow (ServiceLow, theServiceLow, serviceFormatErrorMsg)
@@ -14,11 +14,8 @@ printHigh = (=<<) (putStrLn . showHigh) . runMaybeT
 showHigh :: Maybe SearchResult -> String
 showHigh = maybe serviceFormatErrorMsg showSearchResult
 
-serviceHigh :: SearchPhrase -> MaybeT IO SearchResult
-serviceHigh = flip serviceHigh' Nothing
-
-serviceHigh' :: SearchPhrase -> PaginationEffect Sroffset (MaybeT IO) [Title]
-serviceHigh' = serviceHigh_withMockBase baseURL
+serviceHigh :: SearchPhrase -> PaginationEffect Sroffset (MaybeT IO) [Title]
+serviceHigh = serviceHigh_withMockBase baseURL
 
 serviceHigh_withMockBase :: URL -> SearchPhrase -> PaginationEffect Sroffset (MaybeT IO) [Title]
 serviceHigh_withMockBase mockBaseURL searchphrase = fmap extractFoundTitlesAndSroffset . theServiceLow . searchURL' mockBaseURL searchphrase
