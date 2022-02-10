@@ -1,8 +1,8 @@
-module Service.ServiceHigh (printHigh, showHigh, abstractFromLowRepresentation, abstractFromLowRepresentation_withMockBase) where
+module Service.ServiceHigh (printHigh, showHigh, serviceHigh, serviceHigh', serviceHigh_withMockBase) where
 
 import Control.Pagination (PaginationEffect)
 import Service.ServiceLow (ServiceLow, theServiceLow, serviceFormatErrorMsg)
-import Service.Url (URL, searchURL, searchURL')
+import Service.Url (SearchPhrase, URL, searchURL', baseURL)
 import Service.SearchResult (SearchResult, showSearchResult, Title, Sroffset)
 import Service.InterpretJSON (extractFoundTitlesAndSroffset)
 import Control.Monad.Trans.Maybe (MaybeT, runMaybeT)
@@ -14,11 +14,11 @@ printHigh = (=<<) (putStrLn . showHigh) . runMaybeT
 showHigh :: Maybe SearchResult -> String
 showHigh = maybe serviceFormatErrorMsg showSearchResult
 
-abstractFromLowRepresentation :: String -> MaybeT IO SearchResult
-abstractFromLowRepresentation searchphrase = abstractFromLowRepresentation' theServiceLow searchphrase Nothing
+serviceHigh :: SearchPhrase -> MaybeT IO SearchResult
+serviceHigh = flip serviceHigh' Nothing
 
-abstractFromLowRepresentation' :: ServiceLow -> String -> PaginationEffect Sroffset (MaybeT IO) [Title]
-abstractFromLowRepresentation' service' searchphrase = fmap extractFoundTitlesAndSroffset . service' . searchURL searchphrase
+serviceHigh' :: SearchPhrase -> PaginationEffect Sroffset (MaybeT IO) [Title]
+serviceHigh' = serviceHigh_withMockBase baseURL
 
-abstractFromLowRepresentation_withMockBase :: URL -> String -> PaginationEffect Sroffset (MaybeT IO) [Title]
-abstractFromLowRepresentation_withMockBase mockBaseURL searchphrase = fmap extractFoundTitlesAndSroffset . theServiceLow . searchURL' mockBaseURL searchphrase
+serviceHigh_withMockBase :: URL -> SearchPhrase -> PaginationEffect Sroffset (MaybeT IO) [Title]
+serviceHigh_withMockBase mockBaseURL searchphrase = fmap extractFoundTitlesAndSroffset . theServiceLow . searchURL' mockBaseURL searchphrase
