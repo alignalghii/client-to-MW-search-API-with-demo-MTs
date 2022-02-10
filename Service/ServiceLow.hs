@@ -16,16 +16,17 @@ import Data.Maybe (fromMaybe)
 import Control.Monad.Trans.Maybe (MaybeT (MaybeT))
 
 ---
--- unsafe (partial)
+-- Unsafe (partial) approach:
 --
 
 type ServiceLow_unsafe = String -> IO JSONResponseObject
 
 theServiceLow_unsafe :: ServiceLow_unsafe
 theServiceLow_unsafe = fmap (fromMaybe $ error serviceFormatErrorMsg) . theServiceLow
+-- Code smell: don't hide service call errors! Redesign, or at least extend the monad transformer stack. See below.
 
 ---
--- Total ones:
+-- Total (safe) solutions:
 ---
 
 serviceConnectionErrorMsg, serviceFormatErrorMsg, serviceUnspecifiedErrorMsg :: String
@@ -33,7 +34,7 @@ serviceConnectionErrorMsg  = "There is a connection error to the target service"
 serviceFormatErrorMsg      = "The target service responds in an incompatible format"
 serviceUnspecifiedErrorMsg = "Unspecified service error. Either: " ++ serviceConnectionErrorMsg ++ ". Or: " ++ serviceFormatErrorMsg ++ "."
 
---lengthy (total, but without the monad transformer formalism)
+-- Lengthy (total, but without the monad transformer formalism)
 type ServiceLow = String -> IO (Maybe JSONResponseObject)
 
 theServiceLow :: ServiceLow
@@ -44,7 +45,7 @@ theServiceLow url = do
     return maybeJsonObject
 
 
--- modular (total, and with with the monad transformer formalism)
+-- Modular (total, and with with the monad transformer formalism)
 type ServiceLow' = String -> MaybeT IO JSONResponseObject
 
 theServiceLow' :: ServiceLow'

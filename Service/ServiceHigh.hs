@@ -19,12 +19,6 @@ abstractFromLowRepresentation searchphrase = abstractFromLowRepresentation' theS
 
 abstractFromLowRepresentation' :: ServiceLow' -> String -> PaginationEffect Sroffset (MaybeT IO) [Title]
 abstractFromLowRepresentation' service' searchphrase = fmap extractFoundTitlesAndSroffset . service' . searchURL searchphrase
---    jsonResponseObject <- service' $ searchURL searchphrase maybeSroffset
---    return $ extractFoundTitlesAndSroffset jsonResponseObject
--- MaybeT . fmap (fmap extractFoundTitlesAndSroffset) . service . searchURL searchphrase
--- wrapperE service searchphrase maybeSroffset = do
---     maybeJsonResponseObject <- lift $ service $ searchURL searchphrase maybeSroffset
---     MaybeT $ return $ fmap extractFoundTitlesAndSroffset maybeJsonResponseObjectSroffset
 
 abstractFromLowRepresentation_withMockBase :: URL -> String -> PaginationEffect Sroffset (MaybeT IO) [Title]
 abstractFromLowRepresentation_withMockBase mockBaseURL searchphrase = fmap extractFoundTitlesAndSroffset . theServiceLow' . searchURL' mockBaseURL searchphrase

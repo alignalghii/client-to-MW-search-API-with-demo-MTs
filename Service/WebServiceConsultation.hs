@@ -1,9 +1,7 @@
 module Service.WebServiceConsultation (searchMessage, runSearchFirstPage, runSearchFirstPage', runSearchPaged', runSearchSlideshow) where
 
-import Service.ServiceHigh (printHigh, abstractFromLowRepresentation, abstractFromLowRepresentation_withMockBase)
 
-
-import Service.ServiceHigh (showHigh, abstractFromLowRepresentation, abstractFromLowRepresentation_withMockBase)
+import Service.ServiceHigh (printHigh, showHigh, abstractFromLowRepresentation, abstractFromLowRepresentation_withMockBase)
 import Service.ServiceLow (ServiceLow, theServiceLow, ServiceLow', theServiceLow', serviceFormatErrorMsg)
 import Service.SearchResult (showSearchResult, actSearchResult)
 import Service.InterpretJSON (JSONResponseObject, Title, Sroffset, extractFoundTitlesAndSroffset)
@@ -24,6 +22,13 @@ import Control.Monad.Trans.Maybe (MaybeT, runMaybeT)
 
 searchMessage :: URL -> String -> IO String
 searchMessage mockBaseURL searchphrase = showHigh <$> (runMaybeT $ abstractFromLowRepresentation_withMockBase mockBaseURL searchphrase Nothing)
+
+
+runSearchSlideshow :: String -> IO ()
+runSearchSlideshow searchphrase = do
+    x <- pagination_MT_lazy $ StateT $ wrapperD theServiceLow searchphrase
+    print x
+
 
 runSearchFirstPage :: String -> IO ()
 runSearchFirstPage searchphrase = do
@@ -63,7 +68,6 @@ wrapper' service searchphrase maybeSroffset = (actSearchResult . build) =<< serv
 
 build :: Maybe JSONResponseObject -> ([Title], Maybe Sroffset)
 build = maybe ([], Nothing) extractFoundTitlesAndSroffset
--- Code smell: don't hide service call errors! Redesign, or at least extend the monad transformer stack.
 
 {--
 runSearchPaged_MT_lazy :: String -> IO ()
@@ -71,30 +75,5 @@ runSearchPaged_MT_lazy searchphrase = do
     pagination_MT_lazy $ wrapper' theServiceLow searchphrase
 --}
 
-runSearchSlideshow :: String -> IO ()
-runSearchSlideshow searchphrase = do
-    x <- pagination_MT_lazy $ StateT $ wrapperD theServiceLow searchphrase
-    print x
-
-{--
-runSearchPagedWith' :: (String -> String) -> (Maybe JSONResponseObject -> IO ()) -> String -> IO ()
-runSearchPagedWith' info delay searchphrase = do
-    putStrLn $ info searchphrase
-    pagination_noMT $ wrapper' (\url -> theServiceLow url >>= delay) searchphrase
-    return ()
-
---wrapper' :: (String -> IO a) -> String -> PaginationEffect Sroffset IO [Title]
-wrapper' service url maybeSroffset = service (searchURL url maybeSroffset)
--- Code smell: don't hide service call errors! Redesign, or at least extend the monad transformer stack.
---}
-
-{--
-sandwich :: Monad m => m a -> m b -> m c -> m c
-sandwich info delay action = info >> postdelay action delay
---}
-
 postdelay :: Monad m => m a -> m b -> m a
 postdelay action delay = action >>= ((>>) delay . return)
-
-runSearchInteract :: String -> IO ()
-runSearchInteract = undefined
