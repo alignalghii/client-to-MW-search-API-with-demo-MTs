@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Service.Service (Service_unsafe, callService_unsafe, serviceFormatErrorMsg, Service, callService, Service', callService') where
+module Service.ServiceLow (Service_unsafe, callService_unsafe, serviceFormatErrorMsg, Service, callService, Service', callService') where
 
 import Service.InterpretJSON (JSONResponseObject)
 

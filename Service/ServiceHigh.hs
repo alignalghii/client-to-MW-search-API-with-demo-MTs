@@ -1,7 +1,7 @@
-module Service.ServiceHigh (printHigh, showHigh, abstractFromLowRepresentation, abstractFromLowRepresentation_withMockBase) where -- rename `Service.Service` to `Service.ServiceLow`
+module Service.ServiceHigh (printHigh, showHigh, abstractFromLowRepresentation, abstractFromLowRepresentation_withMockBase) where
 
 import Control.Pagination (PaginationEffect)
-import Service.Service (Service', callService', serviceFormatErrorMsg)
+import Service.ServiceLow (Service', callService', serviceFormatErrorMsg)
 import Service.Url (URL, searchURL, searchURL')
 import Service.SearchResult (SearchResult, showSearchResult, Title, Sroffset)
 import Service.InterpretJSON (extractFoundTitlesAndSroffset)

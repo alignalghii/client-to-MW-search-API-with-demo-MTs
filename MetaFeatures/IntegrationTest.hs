@@ -1,7 +1,7 @@
 module MetaFeatures.IntegrationTest (runIntegrationTests) where
 
 import Service.WebServiceConsultation (searchMessage)
-import Service.Service (serviceFormatErrorMsg)
+import Service.ServiceLow (serviceFormatErrorMsg)
 import Service.Url (URL, mockBaseURL_formatError)
 import System.IO (hFlush, stdout)
 

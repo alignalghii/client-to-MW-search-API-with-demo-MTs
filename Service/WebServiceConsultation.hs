@@ -4,7 +4,7 @@ import Service.ServiceHigh (printHigh, abstractFromLowRepresentation, abstractFr
 
 
 import Service.ServiceHigh (showHigh, abstractFromLowRepresentation, abstractFromLowRepresentation_withMockBase)
-import Service.Service (Service, callService, Service', callService', serviceFormatErrorMsg)
+import Service.ServiceLow (Service, callService, Service', callService', serviceFormatErrorMsg)
 import Service.SearchResult (showSearchResult, actSearchResult)
 import Service.InterpretJSON (JSONResponseObject, Title, Sroffset, extractFoundTitlesAndSroffset)
 import Service.Url (URL, searchURL)
