@@ -1,0 +1,2 @@
+- Extend integration tests: not only the first-paged-search shoud be tested,
+- and not only for exception handling
