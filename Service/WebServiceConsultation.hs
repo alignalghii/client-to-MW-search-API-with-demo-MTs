@@ -1,11 +1,13 @@
-module Service.WebServiceConsultation (runSearchFirstPage, runSearchFirstPage', runSearchPaged', runSearchSlideshow) where
+module Service.WebServiceConsultation (searchMessage, runSearchFirstPage, runSearchFirstPage', runSearchPaged', runSearchSlideshow) where
 
-import Service.ServiceHigh (printHigh, abstractFromLowRepresentation)
+import Service.ServiceHigh (printHigh, abstractFromLowRepresentation, abstractFromLowRepresentation_withMockBase)
 
+
+import Service.ServiceHigh (showHigh, abstractFromLowRepresentation, abstractFromLowRepresentation_withMockBase)
 import Service.Service (Service, callService, Service', callService', serviceFormatErrorMsg)
 import Service.SearchResult (showSearchResult, actSearchResult)
 import Service.InterpretJSON (JSONResponseObject, Title, Sroffset, extractFoundTitlesAndSroffset)
-import Service.Url (searchURL)
+import Service.Url (URL, searchURL)
 
 import Control.Pagination (PaginationEffect)
 import PaginationStateMachines.Effectful.PaginationConceptSeries (pagination_noMT)
@@ -19,6 +21,9 @@ import Control.Concurrent (threadDelay)
 import Control.Monad.Trans.Class (lift)
 import Control.Monad.Trans.Maybe (MaybeT, runMaybeT)
 
+
+searchMessage :: URL -> String -> IO String
+searchMessage mockBaseURL searchphrase = showHigh <$> (runMaybeT $ abstractFromLowRepresentation_withMockBase mockBaseURL searchphrase Nothing)
 
 runSearchFirstPage :: String -> IO ()
 runSearchFirstPage searchphrase = do
@@ -40,7 +45,7 @@ runSearchFirstPage' searchphrase = do
 
 
 runSearchPaged :: String -> IO ()
-runSearchPaged = runSearchPagedWith (\phrase -> "Service: paginated search result for searchphase `" ++ phrase ++ "'") getLine -- (\ a -> getLine >> print a)https://www.gyakorikerdesek.hu/altalad-megvalaszolt-kerdesek
+runSearchPaged = runSearchPagedWith (\phrase -> "Service: paginated search result for searchphase `" ++ phrase ++ "'") getLine -- (\ a -> getLine >> print a)
 
 runSearchPagedWith :: (String -> String) -> IO a -> String -> IO ()
 runSearchPagedWith info delay searchphrase = do

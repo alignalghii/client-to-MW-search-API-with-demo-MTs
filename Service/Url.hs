@@ -1,12 +1,20 @@
 module Service.Url where
 
 
-baseURL :: String
-baseURL = "https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&utf8=1&srsearch="
+type URL = String
 
-searchURL :: String -> Maybe Int -> String
-searchURL searchPhrase mbToken = let basic = baseURL ++ searchPhrase
-                                     pagin = maybe ""  ((++) "&sroffset=" . show) mbToken
-                                 in basic ++ pagin
+baseURL, mockBaseURL_contactError, mockBaseURL_formatError :: URL
+baseURL                  = "https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&utf8=1&srsearch="
+mockBaseURL_contactError = "https://aaaaaaaaaaaaaaaa/w/api.php?action=query&format=json&list=search&utf8=1&srsearch=" -- wrong address
+mockBaseURL_formatError  = "https://en.wikipedia.org/w/api.php?action=query&list=search&utf8=1&srsearch=" -- missing: &format=json 
+
+searchURL :: String -> Maybe Int -> URL
+searchURL = searchURL' baseURL
 
 -- TODO: a searchphrase containing space must be encoded (quotated)
+
+
+searchURL' :: URL -> String -> Maybe Int -> URL
+searchURL' mockBaseURL searchPhrase mbToken = let basic = mockBaseURL ++ searchPhrase
+                                                  pagin = maybe ""  ((++) "&sroffset=" . show) mbToken
+                                              in basic ++ pagin

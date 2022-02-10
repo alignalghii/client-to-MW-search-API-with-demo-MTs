@@ -3,7 +3,8 @@ module UI.CommandLine (Flag, argOrder, optGrammar, processOpts) where
 import Service.WebServiceConsultation (runSearchFirstPage', runSearchPaged', runSearchSlideshow)
 
 import MetaFeatures.Help         (runHelp)
-import MetaFeatures.UnitTest     (runTest)
+import MetaFeatures.UnitTest        (runUnitTests)
+import MetaFeatures.IntegrationTest (runIntegrationTests)
 import MetaFeatures.LazinessDemo (runLazinessDemo)
 
 import System.Console.GetOpt (ArgOrder (Permute), OptDescr (Option), ArgDescr (NoArg, ReqArg))
@@ -11,7 +12,7 @@ import System.Console.GetOpt (ArgOrder (Permute), OptDescr (Option), ArgDescr (N
 
 -- Vocabulary:
 
-data Flag = Help | UnitTests | LazinessDemo | SearchService String | PagedService String | SlideService String
+data Flag = Help | UnitTests | IntegrationTests | LazinessDemo | SearchService String | PagedService String | SlideService String
 
 -- Syntax:
 
@@ -21,7 +22,8 @@ argOrder = Permute
 optGrammar :: [OptDescr Flag]
 optGrammar = [
                  Option "h?" ["help"              ] (NoArg Help)                    " ... Info about the command-line interface (flags, options)",
-                 Option "t"  ["test"              ] (NoArg UnitTests)               " ... Run unit tests for the programs's main logic part: the pagination state machines (transition functions, monads, monad transformers)",
+                 Option "tu" ["test" , "unit-test"] (NoArg UnitTests)               " ... Run unit tests for the programs's main logic part: the pagination state machines (transition functions, monads, monad transformers)",
+                 Option "i"  ["itest", "intgr-test"] (NoArg IntegrationTests)       " ... Run integrations tests (e.g. service exception handling)",
                  Option "dl" ["demo"  , "laziness"] (NoArg LazinessDemo)            " ... Run special unit tests for demonstarting the limits of laziness",
                  Option "S"  ["search", "service" ] (ReqArg SearchService "<EXPR>") " ... Consult MediaWiki API's search: 1st page of results for <EXPR> (i.e. the first ten items)",
                  Option "p"  ["pager" , "paginate"] (ReqArg PagedService  "<EXPR>") " ... Consult MediaWiki API's search: paginated results for <EXPR> (interactive pagination)",
@@ -31,7 +33,8 @@ optGrammar = [
 -- Semantics:
 
 processOpts :: ([Flag], [String], [String]) -> IO ()
-processOpts ([UnitTests]         , []    ,     []   ) = runTest
+processOpts ([UnitTests]         , []    ,     []   ) = runUnitTests
+processOpts ([IntegrationTests]  , []    ,     []   ) = runIntegrationTests
 processOpts ([LazinessDemo]      , []    ,     []   ) = runLazinessDemo
 processOpts ([SearchService expr], []    ,     []   ) = runSearchFirstPage' expr
 processOpts ([PagedService expr] , []    ,     []   ) = runSearchPaged' expr

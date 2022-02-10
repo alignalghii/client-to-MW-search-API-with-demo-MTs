@@ -1,4 +1,4 @@
-module MetaFeatures.UnitTest where
+module MetaFeatures.UnitTest (runUnitTests) where
 
 import qualified PaginationStateMachines.Effectless.PaginationConceptSeriesSpec as EffectlessSpecs (spec)
 import qualified PaginationStateMachines.Effectful.PaginationConceptSeriesSpec  as EffectfulSpecs  (spec)
@@ -7,5 +7,5 @@ import Test.Hspec (hspec)
 import System.Environment (withArgs)
 
 
-runTest :: IO ()
-runTest = withArgs [] $ hspec $ EffectlessSpecs.spec >> EffectfulSpecs.spec
+runUnitTests :: IO ()
+runUnitTests = withArgs [] $ hspec $ EffectlessSpecs.spec >> EffectfulSpecs.spec
