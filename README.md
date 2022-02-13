@@ -21,25 +21,25 @@ The user can provide this continuation token in his/her next search alongside wi
 ##Usage
 
 ```
-me@my-computer:~/haskell/crawler$ ./crawler --help
-Usage: crawler <OPTION>
+me@my-computer:~/haskell/crawler$ ./client-to-MW-search-API-with-demo-MTs --help
+Usage: client-to-MW-search-API-with-demo-MTs <OPTION>
 where <OPTION> can be *one* of the following options:
   -S <EXPR>  --search=<EXPR>, --service=<EXPR>   # Consult with Wikipedia's search service: search for <EXPR>
   -t         --test                              # Run unit tests
   -h, -?     --help                              # Info about the command-line interface (flags, options)
 
 Abbreviations:
-    `crawler` alone is interpreted as `crawler --help`
-    `crawler <EXPR>` is interpreted as `crawler --search <EXPR>`
+    `client-to-MW-search-API-with-demo-MTs` alone is interpreted as `client-to-MW-search-API-with-demo-MTs --help`
+    `client-to-MW-search-API-with-demo-MTs <EXPR>` is interpreted as `client-to-MW-search-API-with-demo-MTs --search <EXPR>`
 me@my-computer:~/haskell/crawler$
 ```
 
 ## Examples
 
-An examaple for the most common case: there are so many result items that pagination is needed:
+An example for the most common case: there are so many result items that pagination is needed:
 
 ```
-me@my-computer:~/haskell/crawler$ ./crawler --search=Haskell
+me@my-computer:~/haskell/crawler$ ./client-to-MW-search-API-with-demo-MTs --search=Haskell
 Service: first-page of search result for searchphase `Haskell'
  - Haskell
  - Haskell (programming language)
@@ -58,7 +58,7 @@ me@my-computer:~/haskell/crawler$
 An example where pagination is not needed, because there are fewer than 10 result title items:
 
 ```
-me@my-computer:~/haskell/crawler$ ./crawler --search=Vackor
+me@my-computer:~/haskell/crawler$ ./client-to-MW-search-API-with-demo-MTs --search=Vackor
 Service: first-page of search result for searchphase `Vackor'
  - Vackor az első bében
  - Europa postage stamp
@@ -70,7 +70,7 @@ me@my-computer:~/haskell/crawler$
 An example where pagination is not needed, because there are no result title items at all:
 
 ```
-me@my-computer:~/haskell/crawler$ ./crawler --search=tughneghaq
+me@my-computer:~/haskell/crawler$ ./client-to-MW-search-API-with-demo-MTs --search=tughneghaq
 Service: first-page of search result for searchphase `tughneghaq'
 No more search results
 me@my-computer:~/haskell/crawler$
@@ -81,6 +81,8 @@ me@my-computer:~/haskell/crawler$
 ### Unit tests
 
 ```
+me@my-computer:~/haskell/crawler$ ./client-to-MW-search-API-with-demo-MTs --unit-test
+
 Infinite effectless pagination
   Both infinite state-jumps and finite state-jumps can have an infinite runtime
     God's infinite book with infinite state-jumps
@@ -95,9 +97,9 @@ Effectful pagination
     Without state transformer
     With state transformer
 
-Finished in 0.0008 seconds
+Finished in 0.0063 seconds
 7 examples, 0 failures
-me@my-computer:~/haskell/crawler$ ./crawler --help
+me@my-computer:~/haskell/crawler$
 ```
 
 ### Integrated tests
