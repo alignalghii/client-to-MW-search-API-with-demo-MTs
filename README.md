@@ -1,6 +1,24 @@
-The [API:Search](https://www.mediawiki.org/wiki/API:Search) site of MediaWiki.
+# Monad transformers demonstrated with a search API client
 
-Usage:
+Monad transformers — an important field of how to design architecture for complex Haskell projects — can present a steep learning curve.
+This little project tries to provide a small motivating example.
+
+The non-pedagogical, naked technical goal of the project is to provide an API client softwer to the [API:Search](https://www.mediawiki.org/wiki/API:Search) service of MediaWiki.
+
+Wikipedia has many interesting articles and other useful resources (e.g. images, videos) in the most various topics.
+The user can navigate simply reading the articles and jumping throught their links from article to article, or use the category labels, or read portal-like articles summarizing many fields of a broad topic. But besides all these link-based tools, there is also a search feature, mostly used by readers of Wikipedia. This feature is available not only for direct human use: Wikipedia also provides an API, capable of finding a listing various documents based on the searchphrase provivd by the user.
+
+The [API:Search](https://www.mediawiki.org/wiki/API:Search) site of MediaWiki describes the use of this API. At the URL address of the service, the searchphrase can be provided with the `&rsearch=` particle of a `GET` request. To experiment with the service interactively, here is the sandbox site for that: [API sandbox](https://en.wikipedia.org/wiki/Special:ApiSandbox#action=query&list=search&srsearch=Haskell&utf8=&format=json), exemplified here with searchphrase „*Haskell*”.
+
+The search results come in a paginated way: the results contain
+
+- a limited number of the found items themselves,
+- plus an optional „continuation token” — `sroffset` —, it is a natural number.
+
+The user can provide this continuation token in his/her next search alongside with the searchprase, then the server will provide a continuation of the search.
+
+
+##Usage
 
 ```
 me@my-computer:~/haskell/crawler$ ./crawler --help
@@ -16,7 +34,9 @@ Abbreviations:
 me@my-computer:~/haskell/crawler$
 ```
 
-Examples:
+## Examples
+
+An examaple for the most common case: there are so many result items that pagination is needed:
 
 ```
 me@my-computer:~/haskell/crawler$ ./crawler --search=Haskell
@@ -35,6 +55,8 @@ There are more results, repeat seach with &sroffset=10
 me@my-computer:~/haskell/crawler$
 ```
 
+An example where pagination is not needed, because there are fewer than 10 result title items:
+
 ```
 me@my-computer:~/haskell/crawler$ ./crawler --search=Vackor
 Service: first-page of search result for searchphase `Vackor'
@@ -45,6 +67,8 @@ No more search results
 me@my-computer:~/haskell/crawler$
 ```
 
+An example where pagination is not needed, because there are no result title items at all:
+
 ```
 me@my-computer:~/haskell/crawler$ ./crawler --search=tughneghaq
 Service: first-page of search result for searchphase `tughneghaq'
@@ -52,7 +76,9 @@ No more search results
 me@my-computer:~/haskell/crawler$
 ```
 
-Unit tests:
+## Tests
+
+### Unit tests
 
 ```
 Infinite effectless pagination
@@ -74,3 +100,6 @@ Finished in 0.0008 seconds
 me@my-computer:~/haskell/crawler$ ./crawler --help
 ```
 
+### Integrated tests
+
+### Laziness experimentation
