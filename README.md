@@ -151,7 +151,38 @@ me@my-computer:~/haskell/crawler$
 
 ### Theoretical stack of monad transformers
 
+The overall architercture can be presented in a concide way with the following types:
+
+```haskell
+type PaginationToken   = Int
+type PaginationControl = Maybe PaginationToken -- Both the start and stop states are represented by `Nothing`
+
+data ErrorType  = FailedConnection | UnexpectedResponseFormat
+type ErrorMonad = Either ErrorType
+
+type DocumentTitle = String
+
+type Architecture = StateT PaginationControl (ErrorMonad IO) [DocumentTitle]
+```
+
 ### Factual stack
+
+Practicaly, in the current stage of the development, a lot of more low-level solutions are used. Contentually, they express the same, as the above scheme, but they have not yet been brought to this conceptually clear format.
+
+For example, often a transition function is used instead of an explicit state monad. In all these cases, an implicit state monad is hiding behind the use and the context of the transition function.
+
+The project tries to be somewhat didactical and historical here (at the cost of losing conciseness). The following modules present a kind of wandering from the most naive styles of state respresentations toward more and more explicit and standard formalisms:
+
+- Control
+    - [Transition](Control/Transition.hs)
+    - [Pagination](Control/Pagination.hs)
+- PaginationStatemachines
+    - Effectless
+        - [PaginationConceptSeries](PaginationStateMachines/Effectless/PaginationConceptSeries.hs)
+        - [PaginationConceptSeriesSpec](PaginationStateMachines/Effectless/PaginationConceptSeriesSpec.hs)
+    - Effectful
+        - [PaginationConceptSeries](PaginationStateMachines/Effectful/PaginationConceptSeries.hs)
+        - [PaginationConceptSeriesSpec](PaginationStateMachines/Effectful/PaginationConceptSeriesSpec.hs)
 
 ## Meta-features: automatic tests, experiments
 
