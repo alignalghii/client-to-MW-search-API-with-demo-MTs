@@ -171,22 +171,25 @@ Practicaly, in the current stage of the development, a lot of more low-level sol
 
 For example, often a transition function is used instead of an explicit state monad. In all these cases, an implicit state monad is hiding behind the use and the context of the transition function.
 
-The project tries to be somewhat didactical and historical here (at the cost of losing conciseness). The following modules present a kind of wandering from the most naive styles of state respresentations toward more and more explicit and standard formalisms:
+The project intends to be somewhat didactical and historical here (at the cost of losing conciseness). The following modules present a kind of wandering from the most naive styles of state respresentations toward more and more explicit and standard formalisms:
 
 - Control
-    - [Transition](Control/Transition.hs)
-    - [Pagination](Control/Pagination.hs)
-- PaginationStatemachines
-    - Effectless
-        - [PaginationConceptSeries](PaginationStateMachines/Effectless/PaginationConceptSeries.hs)
-        - [PaginationConceptSeriesSpec](PaginationStateMachines/Effectless/PaginationConceptSeriesSpec.hs)
-    - Effectful
-        - [PaginationConceptSeries](PaginationStateMachines/Effectful/PaginationConceptSeries.hs)
-        - [PaginationConceptSeriesSpec](PaginationStateMachines/Effectful/PaginationConceptSeriesSpec.hs)
+    - [`Transition`](Control/Transition.hs)
+    - [`Pagination`](Control/Pagination.hs)
+- `PaginationStatemachines`
+    - `Effectless`
+        - [`PaginationConceptSeries`](PaginationStateMachines/Effectless/PaginationConceptSeries.hs)
+        - [`PaginationConceptSeriesSpec`](PaginationStateMachines/Effectless/PaginationConceptSeriesSpec.hs)
+    - `Effectful`
+        - [`PaginationConceptSeries`](PaginationStateMachines/Effectful/PaginationConceptSeries.hs)
+        - [`PaginationConceptSeriesSpec`](PaginationStateMachines/Effectful/PaginationConceptSeriesSpec.hs)
 
 ## Meta-features: automatic tests, experiments
 
 ### Unit tests
+
+
+Unit tests can be invoked by the user simply as part of the command-line options:
 
 ```
 me@my-computer:~/haskell/crawler$ ./client-to-MW-search-API-with-demo-MTs --unit-test
@@ -209,6 +212,21 @@ Finished in 0.0063 seconds
 7 examples, 0 failures
 me@my-computer:~/haskell/crawler$
 ```
+
+Technically, in the surcecode, unit tests are „pure” tests on a state machine without the „unpure” `IO` monad:
+
+- `PaginationStatemachines`
+    - `Effectless`
+        - [`PaginationConceptSeries`](PaginationStateMachines/Effectless/PaginationConceptSeries.hs)
+        - [`PaginationConceptSeriesSpec`](PaginationStateMachines/Effectless/PaginationConceptSeriesSpec.hs)
+
+
+Even those monad transformers are tested without `IO`, which work together in the edge application with `IO`. In their corresponding unit test the `IO` part of their transfomer stack is replaced with the „harmless”, „purer” `ErrorMonad`:
+
+- `Effectful`
+    - [`PaginationConceptSeries`](PaginationStateMachines/Effectful/PaginationConceptSeries.hs)
+    - [`PaginationConceptSeriesSpec`](PaginationStateMachines/Effectful/PaginationConceptSeriesSpec.hs)
+
 
 ### Integration tests
 
