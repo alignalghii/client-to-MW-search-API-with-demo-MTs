@@ -147,6 +147,12 @@ No more search results
 me@my-computer:~/haskell/crawler$
 ```
 
+## Architecture
+
+### Theoretical stack of monad transformers
+
+### Factual stack
+
 ## Meta-features: automatic tests, experiments
 
 ### Unit tests
