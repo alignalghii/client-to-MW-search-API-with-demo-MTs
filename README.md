@@ -2,17 +2,17 @@
 
 ## Table of contents
 
-- [Table of contents](#markdown-header-table-of-contents)
-- [Introduction](#markdown-header-introduction)
-- [Usage](#markdown-header-usage)
-    - [Examples](#markdown-header-axamples)
-- [Architecture](#markdown-header-architecture)
-    - [Theoretical stack of monad transformers](#markdown-header-theoretical-stack-of-monad-transformers)
-    - [Factual stack](#markdown-header-factual-stack)
-- [Tests](#markdown-header-tests)
-    - [Unit tests](#markdown-header-unit-tests)
-    - [Integration tests](#markdown-header-integration-tests)
-    - [Laziness experimentation](#markdown-header-laziness-experimentation)
+- [Table of contents](#table-of-contents)
+- [Introduction](#introduction)
+- [Usage](#usage)
+    - [Examples](#examples)
+- [Architecture](#architecture)
+    - [Theoretical stack of monad transformers](#theoretical-stack-of-monad-transformers)
+    - [Factual stack](#factual-stack)
+- [Meta-features: automatic tests, experiments](#meta-features-automatic-tests-experiments)
+    - [Unit tests](#unit-tests)
+    - [Integration tests](#integration-tests)
+    - [Laziness experimentation](#laziness-experimentation)
 
 ## Introduction
 
@@ -34,7 +34,7 @@ The search results come in a paginated way: the results contain
 The user can provide this continuation token in his/her next search alongside with the searchprase, in order  to instruct the server to provide a continuation of the search with the next ten items.
 
 
-##Usage
+## Usage
 
 The program is a command-line tool. `Makefile` names the executable file `client-to-MW-search-API-with-demo-MTs`. A help info can be seen when calling the program name alone, or with option `--help`:
 
@@ -147,7 +147,7 @@ No more search results
 me@my-computer:~/haskell/crawler$
 ```
 
-## Tests
+## Meta-features: automatic tests, experiments
 
 ### Unit tests
 
