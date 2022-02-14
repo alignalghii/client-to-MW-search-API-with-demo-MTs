@@ -179,7 +179,7 @@ Finished in 0.0063 seconds
 me@my-computer:~/haskell/crawler$
 ```
 
-### Integrated tests
+### Integration tests
 
 ```
 me@my-computer:~/haskell/crawler$ ./client-to-MW-search-API-with-demo-MTs --intgr-test
