@@ -18,7 +18,7 @@ runLazinessDemo = do
     threadDelay 2000000
     putStr "<<!!-INFINITE-LOOP-!!>>\r ✕\n"
     killThread mbThreadId
-    putStr "  - laziness of IO monad on top of the lazy State monad transformer (StateT s IO a): "
+    putStr " -  laziness of IO monad on top of the lazy State monad transformer (StateT s IO a): "
     ioThreadId <- forkIO $ fmap (take 12) (evalStateT machineIO 0) >>= print >> putStr "\r ✓\n"
     threadDelay 2000000
     putStr "<<!!-INFINITE-LOOP-!!>>\r ✕\n"
