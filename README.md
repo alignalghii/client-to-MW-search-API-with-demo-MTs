@@ -173,7 +173,7 @@ For example, often a transition function is used instead of an explicit state mo
 
 The project intends to be somewhat didactical and historical here (at the cost of losing conciseness). The following modules present a kind of wandering from the most naive styles of state respresentations toward more and more explicit and standard formalisms:
 
-- Control
+- `Control`
     - [`Transition`](Control/Transition.hs)
     - [`Pagination`](Control/Pagination.hs)
 - `PaginationStatemachines`
@@ -247,5 +247,3 @@ Laziness of Identity, Maybe and IO monads on top of lazy State monad transformer
  ✕  laziness of Maybe monad on top of the lazy State monad transformer (StateT s Maybe a): <<!!-INFINITE-LOOP-!!>>
  ✕  laziness of IO monad on top of the lazy State monad transformer (StateT s IO a): <<!!-INFINITE-LOOP-!!>>
 ```
-
-### Laziness experimentation
