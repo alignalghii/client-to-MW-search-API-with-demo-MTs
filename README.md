@@ -6,6 +6,7 @@
 - [Introduction](#introduction)
 - [Usage](#usage)
     - [Examples](#examples)
+- [Pagination state machine](#pagination-state-machine)
 - [Architecture](#architecture)
     - [Theoretical stack of monad transformers](#theoretical-stack-of-monad-transformers)
     - [Factual stack](#factual-stack)
@@ -146,6 +147,10 @@ Service: first-page of search result for searchphase `tughneghaq'
 No more search results
 me@my-computer:~/haskell/crawler$
 ```
+
+## Pagination state machine
+
+![Pagination state machine](doc/pagination-state-machine.png "Pagination state machine")
 
 ## Architecture
 
