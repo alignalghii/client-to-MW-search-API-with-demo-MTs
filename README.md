@@ -25,7 +25,7 @@ This little project tries to provide a small motivating example.
 The non-pedagogical, naked technical goal of the project is to provide an API client softwer to the [API:Search](https://www.mediawiki.org/wiki/API:Search) service of MediaWiki.
 
 Wikipedia has many interesting articles and other useful resources (e.g. images, videos) in the most various topics.
-The user can navigate simply reading the articles and jumping throught their links from article to article, or use the category labels, or read portal-like articles summarizing many fields of a broad topic. But besides all these link-based tools, there is also a search feature, mostly used by readers of Wikipedia. This feature is available not only for direct human use: Wikipedia also provides an API, capable of finding a listing various documents based on the searchphrase provivd by the user.
+The user can navigate simply reading the articles and jumping through their links from article to article, or use the category labels, or read portal-like articles summarizing many fields of a broad topic. But besides all these link-based tools, there is also a search feature, mostly used by readers of Wikipedia. This feature is available not only for direct human use: Wikipedia also provides an API, capable of finding a listing various documents based on the searchphrase provided by the user.
 
 The [API:Search](https://www.mediawiki.org/wiki/API:Search) site of MediaWiki describes the use of this API. At the URL address of the service, the searchphrase can be provided with the `&rsearch=` particle of a `GET` request. To experiment with the service interactively, here is the sandbox site for that: [API sandbox](https://en.wikipedia.org/wiki/Special:ApiSandbox#action=query&list=search&srsearch=Haskell&utf8=&format=json), exemplified here with searchphrase „*Haskell*”.
 
@@ -34,7 +34,7 @@ The search results come in a paginated way: the results contain
 - a limited number of the found items themselves (ten ones),
 - plus an optional „continuation token” — `sroffset` —, it is a natural number.
 
-The user can provide this continuation token in his/her next search alongside with the searchprase, in order  to instruct the server to provide a continuation of the search with the next ten items. Of course, this manual work can be automated, and a client program can hide, („abstract away”) this from the users, and can provide a continuous listing of the found items. Formalizing this technique is essentialy what we call a *state machine* for pagination.
+The user can provide this continuation token in his/her next search alongside with the searchprase, in order  to instruct the server to provide a continuation of the search with the next ten items. Of course, this manual work can be automated, and a client program can hide, („abstract away”) this from the users, and can provide a continuous listing of the found items. Formalizing this technique is essentially what we call a *state machine* for pagination.
 
 ### Pagination state machine
 
@@ -44,12 +44,12 @@ A *state machine* consists of a space of distinct *states*, and possible *transi
 
 The diagrams presents and exemplifies a search process when paginated by 10-items in each page. The meaning of the diagram:
 
-- When we use a paginated web servive, usually it is implemented by augmenting both resquests and response with extra information for *pagination control*
-- This pagination is usually the presence or absence of a *pagination token* — usually a simple natural number.
-- At the first call, invoking the search service, we do not augment our request with a pagination token: its absence will be interpreted by the server as begin.
-- The server will provide paginated results, together with the pagination token for continuing, and the client program keppes re-issuing the request with the accordingly updated pagination token having received in the former response.
+- When we use a paginated web service, usually it is implemented by augmenting both requests and response with extra information for *pagination control*.
+- This pagination control is usually the presence (or a meaningful selective absence) of a *pagination token* — usually a simple natural number.
+- At the first call, invoking the search service, we do not augment our request with a pagination token: its absence will be interpreted by the server as the begin of the search.
+- The server will provide paginated results, together with the pagination token for continuing, and the client program keeps re-issuing the request with including also the accordingly updated pagination token having received in the former response.
 - If the server reaches the last items in the actual phase of the paginated search, then it does not include a pagination token in its response.
-- The client program detects this as an end of the search (and the pagination process), and ceases to re-issuse the request, and informs the user about thee completion of the task.
+- The client program detects this absence of pagination token as an end of the search (and the pagination process): it ceases to re-issue the request, and informs the user about thee completion of the task.
 
 ## Usage
 
@@ -75,7 +75,7 @@ The most  useful command-line options are `--search=`, and its improved version,
 ```
 ./client-to-MW-search-API-with-demo-MTs --search=Haskell
 ```
-But if she/he wants to get more search results than the first ten items (i.e. he/she wants to paginate among the result interactively, or evenmore wants to see all results), then he/she must issue
+But if she/he wants to get more search results than the first ten items (i.e. he/she wants to paginate among the result interactively, or even wants to see all results), then he/she must issue
 ```
 ./client-to-MW-search-API-with-demo-MTs --paginate=Haskell
 ```
@@ -99,7 +99,7 @@ There are more results, repeat seach with &sroffset=10
 me@my-computer:~/haskell/crawler$
 ```
 
-As the example shows, `--search=` is a rather low-level option, the need for pagination is signalled to the user, but the command does not help in that any further. The behavior of the more developed `--paginate=` option is more user-friendly in pagination:
+As the example shows, `--search=` is a rather low-level option, the need for pagination is signaled to the user, but the command does not help in that any further. The behavior of the more developed `--paginate=` option is more user-friendly in pagination:
 
 ```
 me@my-computer:~/haskell/crawler$ ./client-to-MW-search-API-with-demo-MTs --paginate=Haskell
@@ -170,7 +170,7 @@ me@my-computer:~/haskell/crawler$
 
 ![Monad transformer stack](doc/monad-transformer-stack.autocrop.png "Monad transformer stack")
 
-The overall architercture can be presented in a concise way:
+The overall architecture can be presented in a concise way:
 
 ```haskell
 type Architecture = StateT PaginationControl (ErrorMonadT IO) [DocumentTitle]
@@ -193,11 +193,11 @@ type DocumentTitle = String
 
 #### Implicit, less elaborate state handling
 
-Practicaly, in the current stage of the development, a lot of more low-level solutions are used. Contentually, they express the same, as the above scheme, but they have not yet been brought to this conceptually clear format.
+Practically, in the current stage of the development, a lot of more low-level solutions are used. Contentually, they express the same, as the above scheme, but they have not yet been brought to this conceptually clear format.
 
 For example, often a transition function is used instead of an explicit state monad. In all these cases, an implicit state monad is hiding behind the use and the context of the transition function.
 
-The project intends to be somewhat didactical and historical here (at the cost of losing conciseness). The following modules present a kind of wandering from the most naive styles of state respresentations toward more and more explicit and standard formalisms:
+The project intends to be somewhat didactical and historical here (at the cost of losing conciseness). The following modules present a kind of wandering from the most naive styles of state representations toward more and more explicit and standard formalisms:
 
 - `Control`
     - [`Transition`](Control/Transition.hs)
@@ -212,7 +212,7 @@ The project intends to be somewhat didactical and historical here (at the cost o
 
 #### Simpler, less capable exception handling
 
-In the factual stack of monad transformers, instead of `ErrorMonadT` the much simpler `MaybeT` monad trasformer is used yet. The cost of this simplification: the `Maybe`-represented case in the stack can handle only exceptions of „*unexpected server response format*”. The other possibility of exception — server connection error — will be caught only by `IO` monad in the native way.
+In the factual stack of monad transformers, instead of `ErrorMonadT` the much simpler `MaybeT` monad transformer is used yet. The cost of this simplification: the `Maybe`-represented case in the stack can handle only exceptions of „*unexpected server response format*”. The other possibility of exception — server connection error — will be caught only by `IO` monad in the native way.
 
 ## Meta-features: automatic tests, experiments
 
