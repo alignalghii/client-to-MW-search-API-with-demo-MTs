@@ -10,6 +10,8 @@
 - [Architecture](#architecture)
     - [Theoretical stack of monad transformers](#theoretical-stack-of-monad-transformers)
     - [Factual stack](#factual-stack)
+        - [Implicit, less elaborate state handling](#implicit-less-elaborate-state-handling)
+        - [Simpler, less capable exception handling](#simpler-less-capable-exception-handling)
 - [Meta-features: automatic tests, experiments](#meta-features-automatic-tests-experiments)
     - [Unit tests](#unit-tests)
     - [Integration tests](#integration-tests)
@@ -156,7 +158,13 @@ me@my-computer:~/haskell/crawler$
 
 ### Theoretical stack of monad transformers
 
-The overall architercture can be presented in a concide way with the following types:
+The overall architercture can be presented in a concise way:
+
+```haskell
+type Architecture = StateT PaginationControl (ErrorMonadT IO) [DocumentTitle]
+```
+
+with the following types:
 
 ```haskell
 type PaginationToken   = Int
@@ -167,11 +175,11 @@ type ErrorMonad         = Either ErrorType
 newtype ErrorMonadT m a = ErrorMonadT {runErrorMonadT :: m (ErrorMonad a)}
 
 type DocumentTitle = String
-
-type Architecture = StateT PaginationControl (ErrorMonadT IO) [DocumentTitle]
 ```
 
 ### Factual stack
+
+#### Implicit, less elaborate state handling
 
 Practicaly, in the current stage of the development, a lot of more low-level solutions are used. Contentually, they express the same, as the above scheme, but they have not yet been brought to this conceptually clear format.
 
@@ -189,6 +197,10 @@ The project intends to be somewhat didactical and historical here (at the cost o
     - `Effectful`
         - [`PaginationConceptSeries`](PaginationStateMachines/Effectful/PaginationConceptSeries.hs)
         - [`PaginationConceptSeriesSpec`](PaginationStateMachines/Effectful/PaginationConceptSeriesSpec.hs)
+
+#### Simpler, less capable exception handling
+
+In the factual stack of monad transformers, instead of `ErrorMonadT` the much simpler `MaybeT` monad trasformer is used yet. The cost of this simplification: the `Maybe`-represented case in the stack can handle only exceptions of „*unexpected server response format*”. The other possibility of exception — server connection error — will be caught only by `IO` monad in the native way.
 
 ## Meta-features: automatic tests, experiments
 
