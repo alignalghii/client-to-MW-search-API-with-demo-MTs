@@ -4,9 +4,9 @@
 
 - [Table of contents](#table-of-contents)
 - [Introduction](#introduction)
+    - [Pagination state machine](#pagination-state-machine)
 - [Usage](#usage)
     - [Examples](#examples)
-- [Pagination state machine](#pagination-state-machine)
 - [Architecture](#architecture)
     - [Theoretical stack of monad transformers](#theoretical-stack-of-monad-transformers)
     - [Factual stack](#factual-stack)
@@ -34,8 +34,22 @@ The search results come in a paginated way: the results contain
 - a limited number of the found items themselves (ten ones),
 - plus an optional „continuation token” — `sroffset` —, it is a natural number.
 
-The user can provide this continuation token in his/her next search alongside with the searchprase, in order  to instruct the server to provide a continuation of the search with the next ten items.
+The user can provide this continuation token in his/her next search alongside with the searchprase, in order  to instruct the server to provide a continuation of the search with the next ten items. Of course, this manual work can be automated, and a client program can hide, („abstract away”) this from the users, and can provide a continuous listing of the found items. Formalizing this technique is essentialy what we call a *state machine* for pagination.
 
+### Pagination state machine
+
+A *state machine* consists of a space of distinct *states*, and possible *transitions* between these states can be represented by arrows, usually together with conditions, input triggers and output actions. Here, for representing pagination as a special state machine, a mixed notation is shown („extended state machine”):
+
+![Pagination state machine](doc/pagination-state-machine.png "Pagination state machine")
+
+The diagrams presents and exemplifies a search process when paginated by 10-items in each page. The meaning of the diagram:
+
+- When we use a paginated web servive, usually it is implemented by augmenting both resquests and response with extra information for *pagination control*
+- This pagination is usually the presence or absence of a *pagination token* — usually a simple natural number.
+- At the first call, invoking the search service, we do not augment our request with a pagination token: its absence will be interpreted by the server as begin.
+- The server will provide paginated results, together with the pagination token for continuing, and the client program keppes re-issuing the request with the accordingly updated pagination token having received in the former response.
+- If the server reaches the last items in the actual phase of the paginated search, then it does not include a pagination token in its response.
+- The client program detects this as an end of the search (and the pagination process), and ceases to re-issuse the request, and informs the user about thee completion of the task.
 
 ## Usage
 
@@ -149,10 +163,6 @@ Service: first-page of search result for searchphase `tughneghaq'
 No more search results
 me@my-computer:~/haskell/crawler$
 ```
-
-## Pagination state machine
-
-![Pagination state machine](doc/pagination-state-machine.png "Pagination state machine")
 
 ## Architecture
 
