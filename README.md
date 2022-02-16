@@ -162,12 +162,13 @@ The overall architercture can be presented in a concide way with the following t
 type PaginationToken   = Int
 type PaginationControl = Maybe PaginationToken -- Both the start and stop states are represented by `Nothing`
 
-data ErrorType  = FailedConnection | UnexpectedResponseFormat
-type ErrorMonad = Either ErrorType
+data ErrorType          = FailedConnection | UnexpectedResponseFormat
+type ErrorMonad         = Either ErrorType
+newtype ErrorMonadT m a = ErrorMonadT {runErrorMonadT :: m (ErrorMonad a)}
 
 type DocumentTitle = String
 
-type Architecture = StateT PaginationControl (ErrorMonad IO) [DocumentTitle]
+type Architecture = StateT PaginationControl (ErrorMonadT IO) [DocumentTitle]
 ```
 
 ### Factual stack
