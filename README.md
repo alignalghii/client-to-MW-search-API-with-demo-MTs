@@ -40,7 +40,7 @@ The user can provide this continuation token in his/her next search alongside wi
 
 A *state machine* consists of a space of distinct *states*, and possible *transitions* between these states can be represented by arrows, usually together with conditions, input triggers and output actions. Here, for representing pagination as a special state machine, a mixed notation is shown („extended state machine”):
 
-![Pagination state machine](doc/pagination-state-machine.scale-half.png "Pagination state machine")
+![Pagination state machine](doc/pagination-state-machine.scale.svg "Pagination state machine")
 
 The diagrams presents and exemplifies a search process when paginated by 10-items in each page. The meaning of the diagram:
 
