@@ -260,7 +260,7 @@ Even those monad transformers are tested without `IO`, which work together in th
 
 ### Integration tests
 
-In the recent state of the development, there is only one intergration testcase. It provokes a wrong reponse format from the server, and checks whether the client can handle it in its intended high-level architecture design (details: the `MaybeT` monad transformer in the overall stack, serving as a poor man's `ErrorMonadT`).
+In the recent state of the development, there is only one intergration testcase. It provokes a wrong reponse format from the server, and checks whether the client can handle it in its intended high-level architecture design (details: it is the `MaybeT` monad transformer in the overall stack, serving as a poor man's `ErrorMonadT`).
 
 ```
 me@my-computer:~/haskell/crawler$ ./client-to-MW-search-API-with-demo-MTs --intgr-test
@@ -302,7 +302,7 @@ Thus, the real implementation of the client uses a more defensive architecture, 
 - `MetaFeatures`
     - [`LazinessDemo`](MetaFeatures/LazinessDemo.hs)
 
-The command-line invoxation of the laziness experimentation is like this:
+The command-line invocation of the laziness experimentation is like this:
 
 ```
 Laziness of Identity, Maybe and IO monads on top of lazy State monad transformer:
