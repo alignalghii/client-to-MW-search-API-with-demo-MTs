@@ -168,7 +168,7 @@ me@my-computer:~/haskell/crawler$
 
 ### Theoretical stack of monad transformers
 
-![Monad transformer stack](doc/monad-transformer-stack.autocrop.scale-half.png "Monad transformer stack")
+![Monad transformer stack](doc/monad-transformer-stack-with-icons.png "Monad transformer stack")
 
 The overall architecture can be presented in a concise way:
 
