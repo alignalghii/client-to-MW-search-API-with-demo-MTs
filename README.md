@@ -260,6 +260,8 @@ Even those monad transformers are tested without `IO`, which work together in th
 
 ### Integration tests
 
+In the recent state of the development, there is only one intergration testcase. It provokes a wrong reponse format from the server, and checks whether the client can handle it in its intended high-level architecture design (details: the `MaybeT` monad transformer in the overall stack, serving as a poor man's `ErrorMonadT`).
+
 ```
 me@my-computer:~/haskell/crawler$ ./client-to-MW-search-API-with-demo-MTs --intgr-test
 Integration tests:
@@ -267,7 +269,40 @@ Integration tests:
 me@my-computer:~/haskell/crawler$
 ```
 
+The integration test is implemented in the sourcecode like this:
+
+
+- `MetaFeatures`
+    - [`IntegrationTest`](MetaFeatures/IntegrationTest.hs)
+
 ### Laziness experimentation
+
+The third kind of „metafeatures” of the program are the „laziness experimentations”. They are almost like integrated tests, but they do not test any existing feature of the client. Instead, they are like a mini research project of its own, although they are distantly connected to the topics of the program too.
+
+In an ideal world, a paginated service use by the client would look somehing like this (for simplicity's sake the `ErrorMonadT` layer is ommitted):
+
+```haskell
+type PaginationToken = Int
+type PaginationToken = Maybe PaginationToken -- `Nothing` denotes the start and the stop state
+
+singleTransition :: StateT PaginationControl IO [Title]
+singleTransition = ...
+
+paginate :: StateT PaginationControl IO [Title] -> StateT PaginationControl IO [[Title]]
+paginate = ...
+
+main :: IO ()
+main = interact $ representationWrapper $ runStateT $ paginate singleTranslation Nothing
+```
+
+This approach builds upon lazy evaluation very heavily. So heavily, that it does not work! It seems that our architecture cannot be that lazy. Even is we use the lazy `StateT` instead of the strict one, it cannot preserve laziness through the `IO` monad (moreover, even not through the `Maybe` monad!)
+
+Thus, the real implementation of the client uses a more defensive architecture, that does not rely on lazy evaluation at all. But as a kind of self-documentation, the program has a kind of special integrated test — or better to say, a kind of demo — on „laziness experimentation”. Due to its possibly infinite (runaway) nature, it is implemented using concurrency and timing:
+
+- `MetaFeatures`
+    - [`LazinessDemo`](MetaFeatures/LazinessDemo.hs)
+
+The command-line invoxation of the laziness experimentation is like this:
 
 ```
 Laziness of Identity, Maybe and IO monads on top of lazy State monad transformer:
