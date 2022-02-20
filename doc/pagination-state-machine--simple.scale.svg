@@ -18,7 +18,7 @@
     </g>
     <g>
       <ellipse style="fill: #9999ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="645.75" cy="174.75" rx="57.75" ry="57.75"/>
-      <ellipse style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" cx="645.75" cy="174.75" rx="46.2" ry="46.2"/>
+      <ellipse style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="645.75" cy="174.75" rx="46.2" ry="46.2"/>
       <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="645.75" y="178.75">
         <tspan x="645.75" y="178.75">Nothing</tspan>
       </text>
