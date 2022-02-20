@@ -1,3 +1,5 @@
+[(Back to central personal homepage)](https://alignalghii.github.io)
+
 # Monad transformers demonstrated with a search API client
 
 ## Table of contents
@@ -33,6 +35,8 @@ This little project presented here tries to present monad transformers in a diff
 
 In short: the non-pedagogical, naked technical goal of the project is to provide an API client softwer to the [API:Search](https://www.mediawiki.org/wiki/API:Search) service of MediaWiki.
 
+[(Back to central personal homepage)](https://alignalghii.github.io)
+
 ### WikiMedia's search API
 
 Wikipedia has many interesting articles and other useful resources (e.g. images, videos) in the most various topics.
@@ -46,6 +50,8 @@ The search results come in a paginated way: the results contain
 - plus an optional „continuation token” — `sroffset` —, it is a natural number.
 
 The user can provide this continuation token in his/her next search alongside with the searchprase, in order  to instruct the server to provide a continuation of the search with the next ten items. Of course, this manual work can be automated, and a client program can hide, („abstract away”) this from the users, and can provide a continuous listing of the found items. Formalizing this technique is essentially what we call a *state machine* for pagination.
+
+[(Back to central personal homepage)](https://alignalghii.github.io)
 
 ### Pagination state machine
 
@@ -66,6 +72,8 @@ On the diagram of the state machine of the pagination, and in the explanation li
 
 - either the start state in the request (the begin of the entire pagination process), if `Nothing` is attached to the request;
 - but it can signinify also the end/termination when `Nothing` is coming as part of the answer.
+
+[(Back to central personal homepage)](https://alignalghii.github.io)
 
 ## State machines in various implementations
 
@@ -147,6 +155,8 @@ pagination_MT' isStartMode transitEffect = do
 
 Despite of the conciseness of the above, the actual programm offen uses transitional, less explicit, less nice solutions.
 
+[(Back to central personal homepage)](https://alignalghii.github.io)
+
 ## Usage
 
 The program is a command-line tool. `Makefile` names the executable file `client-to-MW-search-API-with-demo-MTs`. A help info can be seen when calling the program name alone, or with option `--help`:
@@ -166,6 +176,8 @@ me@my-computer:~/haskell/crawler$
 ```
 
 ### Examples
+
+[(Back to central personal homepage)](https://alignalghii.github.io)
 
 The most  useful command-line options are `--search=`, and its improved version, `--paginate=`. Both these options require a searchphrase argument. For example, if the user wants to see a few Wikipedia article titles for searchphrase „Haskell”, he/hse can issue the command
 ```
@@ -260,6 +272,8 @@ No more search results
 me@my-computer:~/haskell/crawler$
 ```
 
+[(Back to central personal homepage)](https://alignalghii.github.io)
+
 ## Architecture
 
 ### Theoretical stack of monad transformers
@@ -285,6 +299,8 @@ newtype ErrorMonadT m a = ErrorMonadT {runErrorMonadT :: m (ErrorMonad a)}
 type DocumentTitle = String
 ```
 
+[(Back to central personal homepage)](https://alignalghii.github.io)
+
 ### Factual stack
 
 #### Implicit, less elaborate state handling
@@ -305,6 +321,8 @@ The project intends to be somewhat didactical and historical here (at the cost o
     - `Effectful`
         - [`PaginationConceptSeries`](PaginationStateMachines/Effectful/PaginationConceptSeries.hs)
         - [`PaginationConceptSeriesSpec`](PaginationStateMachines/Effectful/PaginationConceptSeriesSpec.hs)
+
+[(Back to central personal homepage)](https://alignalghii.github.io)
 
 #### Simpler, less capable exception handling
 
@@ -353,6 +371,7 @@ Even those monad transformers are tested without `IO`, which work together in th
     - [`PaginationConceptSeries`](PaginationStateMachines/Effectful/PaginationConceptSeries.hs)
     - [`PaginationConceptSeriesSpec`](PaginationStateMachines/Effectful/PaginationConceptSeriesSpec.hs)
 
+[(Back to central personal homepage)](https://alignalghii.github.io)
 
 ### Integration tests
 
@@ -370,6 +389,8 @@ The integration test is implemented in the sourcecode like this:
 
 - `MetaFeatures`
     - [`IntegrationTest`](MetaFeatures/IntegrationTest.hs)
+
+[(Back to central personal homepage)](https://alignalghii.github.io)
 
 ### Laziness experimentation
 
@@ -408,3 +429,5 @@ Laziness of Identity, Maybe and IO monads on top of lazy State monad transformer
  ✕  laziness of Maybe monad on top of the lazy State monad transformer (StateT s Maybe a): <<!!-INFINITE-LOOP-!!>>
  ✕  laziness of IO monad on top of the lazy State monad transformer (StateT s IO a): <<!!-INFINITE-LOOP-!!>>
 ```
+
+[(Back to central personal homepage)](https://alignalghii.github.io)
