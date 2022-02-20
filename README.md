@@ -57,7 +57,7 @@ The user can provide this continuation token in his/her next search alongside wi
 
 A *state machine* consists of a space of distinct *states*, and possible *transitions* between these states can be represented by arrows, usually together with conditions, input triggers and output actions. Here, for representing pagination as a special state machine, a mixed notation is shown („extended state machine”):
 
-![Pagination state machine (extended)](doc/pagination-state-machine--extended.scale.svg "Pagination state machine (extended)")
+![Pagination state machine (extended)](doc/assets/pagination-state-machine--extended.scale.svg "Pagination state machine (extended)")
 
 The diagrams presents and exemplifies a search process when paginated by 10-items in each page. The meaning of the diagram:
 
@@ -75,7 +75,7 @@ On the diagram of the state machine of the pagination, and in the explanation li
 
 The essence can be seen better on this simpler figure, presenting the underlying simple state machine, abstracting details away:
 
-![Pagination state machine (simple)](doc/pagination-state-machine--simple.scale.svg "Pagination state machine (simple)")
+![Pagination state machine (simple)](doc/assets/pagination-state-machine--simple.scale.svg "Pagination state machine (simple)")
 
 [(Back to central personal homepage)](https://alignalghii.github.io)
 
@@ -282,7 +282,7 @@ me@my-computer:~/haskell/crawler$
 
 ### Theoretical stack of monad transformers
 
-![Monad transformer stack](doc/monad-transformer-stack-with-icons.png "Monad transformer stack")
+![Monad transformer stack](doc/assets/monad-transformer-stack-with-icons.png "Monad transformer stack")
 
 The overall architecture can be presented in a concise way:
 
@@ -316,15 +316,15 @@ For example, often a transition function is used instead of an explicit state mo
 The project intends to be somewhat didactical and historical here (at the cost of losing conciseness). The following modules present a kind of wandering from the most naive styles of state representations toward more and more explicit and standard formalisms:
 
 - `Control`
-    - [`Transition`](Control/Transition.hs)
-    - [`Pagination`](Control/Pagination.hs)
+    - [`Transition`](src/Control/Transition.hs)
+    - [`Pagination`](src/Control/Pagination.hs)
 - `PaginationStatemachines`
     - `Effectless`
-        - [`PaginationConceptSeries`](PaginationStateMachines/Effectless/PaginationConceptSeries.hs)
-        - [`PaginationConceptSeriesSpec`](PaginationStateMachines/Effectless/PaginationConceptSeriesSpec.hs)
+        - [`PaginationConceptSeries`](src/PaginationStateMachines/Effectless/PaginationConceptSeries.hs)
+        - [`PaginationConceptSeriesSpec`](src/PaginationStateMachines/Effectless/PaginationConceptSeriesSpec.hs)
     - `Effectful`
-        - [`PaginationConceptSeries`](PaginationStateMachines/Effectful/PaginationConceptSeries.hs)
-        - [`PaginationConceptSeriesSpec`](PaginationStateMachines/Effectful/PaginationConceptSeriesSpec.hs)
+        - [`PaginationConceptSeries`](src/PaginationStateMachines/Effectful/PaginationConceptSeries.hs)
+        - [`PaginationConceptSeriesSpec`](src/PaginationStateMachines/Effectful/PaginationConceptSeriesSpec.hs)
 
 [(Back to central personal homepage)](https://alignalghii.github.io)
 
@@ -365,15 +365,15 @@ Technically, in the surcecode, unit tests are „pure” tests on a state machin
 
 - `PaginationStatemachines`
     - `Effectless`
-        - [`PaginationConceptSeries`](PaginationStateMachines/Effectless/PaginationConceptSeries.hs)
-        - [`PaginationConceptSeriesSpec`](PaginationStateMachines/Effectless/PaginationConceptSeriesSpec.hs)
+        - [`PaginationConceptSeries`](src/PaginationStateMachines/Effectless/PaginationConceptSeries.hs)
+        - [`PaginationConceptSeriesSpec`](src/PaginationStateMachines/Effectless/PaginationConceptSeriesSpec.hs)
 
 
 Even those monad transformers are tested without `IO`, which work together in the edge application with `IO`. In their corresponding unit test the `IO` part of their transfomer stack is replaced with the „harmless”, „purer” `ErrorMonad`:
 
 - `Effectful`
-    - [`PaginationConceptSeries`](PaginationStateMachines/Effectful/PaginationConceptSeries.hs)
-    - [`PaginationConceptSeriesSpec`](PaginationStateMachines/Effectful/PaginationConceptSeriesSpec.hs)
+    - [`PaginationConceptSeries`](src/PaginationStateMachines/Effectful/PaginationConceptSeries.hs)
+    - [`PaginationConceptSeriesSpec`](src/PaginationStateMachines/Effectful/PaginationConceptSeriesSpec.hs)
 
 [(Back to central personal homepage)](https://alignalghii.github.io)
 
@@ -392,7 +392,7 @@ The integration test is implemented in the sourcecode like this:
 
 
 - `MetaFeatures`
-    - [`IntegrationTest`](MetaFeatures/IntegrationTest.hs)
+    - [`IntegrationTest`](src/MetaFeatures/IntegrationTest.hs)
 
 [(Back to central personal homepage)](https://alignalghii.github.io)
 
@@ -421,7 +421,7 @@ This approach builds upon lazy evaluation very heavily. So heavily, that it does
 Thus, the real implementation of the client uses a more defensive architecture, that does not rely on lazy evaluation at all. But as a kind of self-documentation, the program has a kind of special integrated test — or better to say, a kind of demo — on „laziness experimentation”. Due to its possibly infinite (runaway) nature, it is implemented using concurrency and timing:
 
 - `MetaFeatures`
-    - [`LazinessDemo`](MetaFeatures/LazinessDemo.hs)
+    - [`LazinessDemo`](src/MetaFeatures/LazinessDemo.hs)
 
 The command-line invocation of the laziness experimentation is like this:
 
