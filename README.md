@@ -57,7 +57,7 @@ The user can provide this continuation token in his/her next search alongside wi
 
 A *state machine* consists of a space of distinct *states*, and possible *transitions* between these states can be represented by arrows, usually together with conditions, input triggers and output actions. Here, for representing pagination as a special state machine, a mixed notation is shown („extended state machine”):
 
-![Pagination state machine](doc/pagination-state-machine--extended.scale.svg "Pagination state machine")
+![Pagination state machine (extended)](doc/pagination-state-machine--extended.scale.svg "Pagination state machine (extended)")
 
 The diagrams presents and exemplifies a search process when paginated by 10-items in each page. The meaning of the diagram:
 
@@ -72,6 +72,10 @@ On the diagram of the state machine of the pagination, and in the explanation li
 
 - either the start state in the request (the begin of the entire pagination process), if `Nothing` is attached to the request;
 - but it can signinify also the end/termination when `Nothing` is coming as part of the answer.
+
+The essence can be seen better on this simpler figure, presenting the underlying simple state machine, abstracting details away:
+
+![Pagination state machine (simple)](doc/pagination-state-machine--simple.scale.svg "Pagination state machine (simple)")
 
 [(Back to central personal homepage)](https://alignalghii.github.io)
 

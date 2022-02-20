@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="10cm" height="4cm" viewBox="111 114 595 222" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g id="Background">
+    <g>
+      <ellipse style="fill: #9999ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="439" cy="174" rx="58" ry="58"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:italic;font-weight:700" x="439" y="178">
+        <tspan x="439" y="178">Just pgnToken</tspan>
+      </text>
+    </g>
+    <g>
+      <ellipse style="fill: #9999ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="219.833" cy="173.417" rx="54.4167" ry="54.4167"/>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" points="111,173.417 165.417,173.417 "/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="150.18,166.887 165.417,173.417 150.18,178.858 "/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="219.833" y="177.417">
+        <tspan x="219.833" y="177.417">Nothing</tspan>
+      </text>
+    </g>
+    <g>
+      <ellipse style="fill: #9999ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="645.75" cy="174.75" rx="57.75" ry="57.75"/>
+      <ellipse style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" cx="645.75" cy="174.75" rx="46.2" ry="46.2"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="645.75" y="178.75">
+        <tspan x="645.75" y="178.75">Nothing</tspan>
+      </text>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="497" y1="174" x2="578.264" y2="174.67"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="585.764,174.732 575.723,179.649 578.264,174.67 575.806,169.649 "/>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="274.25" y1="173.417" x2="370.278" y2="173.757"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="377.778,173.783 367.76,178.748 370.278,173.757 367.796,168.748 "/>
+    </g>
+    <g>
+      <path style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" d="M 397.982,215.018 A 66.8443,66.8443 0 1 0 487.197,221.481"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="481.784,216.39 492.748,218.579 487.705,220.992 486.611,226.474 "/>
+    </g>
+  </g>
+</svg>
