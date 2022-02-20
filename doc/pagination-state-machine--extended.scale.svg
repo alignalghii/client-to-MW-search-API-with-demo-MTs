@@ -16,7 +16,7 @@
     </g>
     <g>
       <ellipse style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="76.75" cy="245.75" rx="44.75" ry="44.75"/>
-      <ellipse style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" cx="76.75" cy="245.75" rx="35.8" ry="35.8"/>
+      <ellipse style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="76.75" cy="245.75" rx="35.8" ry="35.8"/>
       <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="76.75" y="241.75">
         <tspan x="76.75" y="241.75">No</tspan>
         <tspan x="76.75" y="257.75">token</tspan>
@@ -80,7 +80,7 @@
     </g>
     <g>
       <ellipse style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="429.95" cy="416.966" rx="44.75" ry="44.75"/>
-      <ellipse style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" cx="429.95" cy="416.966" rx="35.8" ry="35.8"/>
+      <ellipse style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="429.95" cy="416.966" rx="35.8" ry="35.8"/>
       <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="429.95" y="412.966">
         <tspan x="429.95" y="412.966">No</tspan>
         <tspan x="429.95" y="428.966">token</tspan>
@@ -135,7 +135,7 @@
     </g>
     <g>
       <ellipse style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="783.95" cy="599.776" rx="44.75" ry="44.75"/>
-      <ellipse style="fill: none; stroke-opacity: 1; stroke-width: 0.2; stroke: #000000" cx="783.95" cy="599.776" rx="35.8" ry="35.8"/>
+      <ellipse style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="783.95" cy="599.776" rx="35.8" ry="35.8"/>
       <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="783.95" y="595.776">
         <tspan x="783.95" y="595.776">No</tspan>
         <tspan x="783.95" y="611.776">token</tspan>
