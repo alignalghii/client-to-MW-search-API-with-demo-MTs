@@ -4,7 +4,10 @@
 
 - [Table of contents](#table-of-contents)
 - [Introduction](#introduction)
+    - [Project's goals](#project-s-goals)
+    - [WikiMedia's search API](#wikimedia-s-search-api)
     - [Pagination state machine](#pagination-state-machine)
+    - [State machines in various implementations](#state-machines-in-various-implementations)
 - [Usage](#usage)
     - [Examples](#examples)
 - [Architecture](#architecture)
@@ -19,10 +22,18 @@
 
 ## Introduction
 
+### Project's goals
+
 Monad transformers — an important field of how to design architecture for complex Haskell projects — can present a steep learning curve.
 This little project tries to provide a small motivating example.
 
-The non-pedagogical, naked technical goal of the project is to provide an API client softwer to the [API:Search](https://www.mediawiki.org/wiki/API:Search) service of MediaWiki.
+In Philip Wadler's „*Monads for functional programming*” paper, monads are introduced by demonstrating how a simple pure interpreter program can be augmented with various effects. For example, a simple pocket calculator program is presented, and developed further in a didactic manner. At first, the program is capable only of simple pure calculations, later, it is augmented by adding the capability of signaling errors to the user. Even later it can be extended also with the notions of *states* (memory registers, variables), *tracing* (output), *configurability* (environment), maybe even reading from remote sites/services (IO). All these additional features added to the core functionality can be implemented in various ways, of course it is expected to do that in a clean code, following principles of modularity, separation of concepts, lazy coupling, code reuse. Monad transformers are at least a partial and usually acceptable solution to the emerging questions.
+
+This little project presented here tries to present monad transformers in a different example than modular interpreters. The present project works with a very simple *protocol*, uses a simple core *state machine*, and presents how accompanying *effects* can be built on top of that core functionality.
+
+In short: the non-pedagogical, naked technical goal of the project is to provide an API client softwer to the [API:Search](https://www.mediawiki.org/wiki/API:Search) service of MediaWiki.
+
+### WikiMedia's search API
 
 Wikipedia has many interesting articles and other useful resources (e.g. images, videos) in the most various topics.
 The user can navigate simply reading the articles and jumping through their links from article to article, or use the category labels, or read portal-like articles summarizing many fields of a broad topic. But besides all these link-based tools, there is also a search feature, mostly used by readers of Wikipedia. This feature is available not only for direct human use: Wikipedia also provides an API, capable of finding a listing various documents based on the searchphrase provided by the user.
@@ -50,6 +61,91 @@ The diagrams presents and exemplifies a search process when paginated by 10-item
 - The server will provide paginated results, together with the pagination token for continuing, and the client program keeps re-issuing the request with including also the accordingly updated pagination token having received in the former response.
 - If the server reaches the last items in the actual phase of the paginated search, then it does not include a pagination token in its response.
 - The client program detects this absence of pagination token as an end of the search (and the pagination process): it ceases to re-issue the request, and informs the user about thee completion of the task.
+
+On the diagram of the state machine of the pagination, and in the explanation list, You can see that the state is an instance of some `Maybe continuationToken` type. Here, the semantics of `Nothing` is dual in a kind of sense: it has double meanings, it can represent
+
+- either the start state in the request (the begin of the entire pagination process), if `Nothing` is attached to the request;
+- but it can signinify also the end/termination when `Nothing` is coming as part of the answer.
+
+## State machines in various implementations
+
+So, we will use *state machines* for implementing paginations. Let us see state machines in a didactic manners, according to their increasing complexity, capability, or explicitness.
+
+The easiest example would be to show an infinite state machine, without any control to terminate. The user does not want to stop pagination, and the resources to paginate are infinite. Let us see:
+
+```haskell
+-- Pagination wthout termination handling (infinite pagination):
+
+infinite_pagination :: Transition paginationState page -> paginationState -> [page]
+infinite_pagination transitFun initialState = let (firstPage, nextState) = transitFun initialState
+                                              in firstPage : infinite_pagination transitFun nextState
+```
+
+This can be used fro some mathematical problems. But in a real pagination situation, we have a start and an end of a pagination: for start the user/client doesn'nees to provide any extra information, and for stop the server can signal an end of the found resources to the client.
+
+As mentioned earlier, we implement all that with adding a special single case to the „token space”
+of pagination: the `Int` pagination-tokens will be wrapped as `Maybe Int`, with `Nothing` having a double meaning for both the start end the end state.
+
+This above double meaning of `Nothing` as an either a start or and and state can be seen in the implementation:
+
+```haskell
+pagination_nonDRY :: PaginationTransition pgnToken page -> [page]
+pagination_nonDRY = flip pagination_nonDRY' Nothing
+
+pagination_nonDRY', pagination_nonDRY_end :: PaginationTransition pgnToken page -> Maybe pgnToken -> [page]
+pagination_nonDRY' transitFun maybePgnToken = let (firstPage, maybeNextPgnToken) = transitFun maybePgnToken
+                                              in firstPage : pagination_nonDRY_end transitFun maybeNextPgnToken
+pagination_nonDRY_end transitFun maybePgnToken = case maybePgnToken of
+                                                            Nothing       -> []
+                                                            Just pgnToken -> let (page, maybeNextPgnToken) = transitFun maybePgnToken
+                                                                             in page : pagination_nonDRY_end transitFun maybeNextPgnToken
+```
+
+The function has two variants, according to the actual „role”/„context”. Because these variants share many common patterns, a more economical solution uses a common function but augmented with a booelan flag parameter, capable of both kinds of behavior according to the flag:
+
+```haskell
+-- Pagination with termination handling and non-redundant (DRY) implementation,
+-- it does not use monads (State monad) yet, instead, transition function is managed directly:
+
+pagination_TF :: PaginationTransition pgnToken page -> [page]
+pagination_TF transitionFunction = pagination_TF' True transitionFunction Nothing
+
+pagination_TF' :: Bool -> PaginationTransition pgnToken page -> Maybe pgnToken -> [page]
+pagination_TF' isStartMode transitionFunction maybePgnToken
+    | isStartMode || isJust maybePgnToken = let (firstPage, maybeNextPgnToken) = transitionFunction maybePgnToken
+                                            in firstPage : pagination_TF' False transitionFunction maybeNextPgnToken
+    | otherwise                           = []
+```
+
+The above definitions operate with *state transitions* — so a state machine is represented as a function, a state transition. But we can represent a state machine much more explicitly with a `State` monad:
+
+```haskell
+pagination_SM :: PaginationState pgnToken page -> [page]
+pagination_SM = flip evalState Nothing . pagination_SM' True
+
+pagination_SM' :: Bool -> PaginationState pgnToken page -> PaginationState pgnToken [page]
+pagination_SM' isStartMode transition = do
+        maybeToken <- get
+        if isStartMode || isJust maybeToken
+            then liftM2 (:) transition $ pagination_SM' False transition
+            else return []
+```
+
+So, You can see how we are proceeding from implicit approaches towards more explicit representations of the topics. Still, all the above solutions can represent only pure state machines. But managing an API with a server is not just a pure state machine: there can be errors, and more importantly, the whole connection is a „dirty” IO. So we must consider „dirty” state machines, more precisely said, state machines with some *effects* on top of them. Such things can be described by *monad transformers*:
+
+```haskell
+pagination_MT :: Monad effect => PaginationStateT pgnToken effect page -> effect [page]
+pagination_MT = flip evalStateT Nothing . pagination_MT' True
+
+pagination_MT' :: Monad effect => Bool -> PaginationStateT pgnToken effect page -> PaginationStateT pgnToken effect [page]
+pagination_MT' isStartMode transitEffect = do
+    maybePgnToken <- get
+    if isStartMode || isJust maybePgnToken
+        then liftM2 (:) transitEffect $ pagination_MT' False transitEffect
+        else return []
+```
+
+Despite of the conciseness of the above, the actual programm offen uses transitional, less explicit, less nice solutions.
 
 ## Usage
 
