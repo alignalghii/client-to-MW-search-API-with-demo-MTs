@@ -6,8 +6,8 @@
 
 - [Table of contents](#table-of-contents)
 - [Introduction](#introduction)
-    - [Project's goals](#project-s-goals)
-    - [WikiMedia's search API](#wikimedia-s-search-api)
+    - [Project's goals](#projects-goals)
+    - [WikiMedia's search API](#wikimedias-search-api)
     - [Pagination state machine](#pagination-state-machine)
     - [State machines in various implementations](#state-machines-in-various-implementations)
 - [Usage](#usage)
