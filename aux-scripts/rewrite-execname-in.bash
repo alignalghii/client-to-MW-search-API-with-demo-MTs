@@ -15,3 +15,14 @@ if test $# -ge 2;
 		echo "Provide the name of the execfile and the name of the config/gitignorefile of Your project as command-line argunents!" >&2;
 		exit 1;
 fi;
+
+####################################################################
+# In the .gitignore file of the overall project,
+# also the executable is listed as to be ignored.
+# Convention: the name of the executable is comes after a header line „# Exec:”.
+#
+# This bash script finds the „# Exec:” header in .gitignore, and regards the next line as the name of the executable.
+# It can rewrite this name to a custom name (provoded in the `execName` variable coming from command-line.
+#
+# This bash script is valled from Makefile at each build.
+####################################################################
