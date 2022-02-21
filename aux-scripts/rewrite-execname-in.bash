@@ -6,9 +6,9 @@ here=`dirname "$0"`;
 
 if test $# -ge 2;
 	then
-		execname="$1"; cfgfilename="$2"; shift 2;
+		execName="$1"; cfgFileName="$2"; shift 2;
 		if which gawk > /dev/null && true; # Set to false if You do not want AWK to update Your `.gitignore` with the name of the executable
-			then gawk -i inplace -v execname="$execname" -f $here/rewrite-execname-in.awk "$cfgfilename";
+			then gawk -i inplace -v execName="$execName" -f $here/rewrite-execname-in.awk "$cfgFileName";
 			else echo 'AWK missing or disabled, it cannot update Your `.gitignore` with the name of the executable';
 		fi;
 	else

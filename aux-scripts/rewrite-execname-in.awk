@@ -1,7 +1,13 @@
 #!/usr/bin/gawk -f
 
-/# [Ee]xec:/ {e=NR+1;}
+/# [Ee]xec:/ {
+	lineOfExecFile = NR + 1;
+}
 
-NR==e {sub(/.*/, execname);}
+NR == lineOfExecFile {
+	sub(/.*/, execName);
+}
 
-{print;}
+{
+	print;
+}
