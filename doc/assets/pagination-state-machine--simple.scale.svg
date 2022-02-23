@@ -32,8 +32,8 @@
       <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="377.778,173.783 367.76,178.748 370.278,173.757 367.796,168.748 "/>
     </g>
     <g>
-      <path style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" d="M 397.982,215.018 A 66.8443,66.8443 0 1 0 487.197,221.481"/>
-      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="481.784,216.39 492.748,218.579 487.705,220.992 486.611,226.474 "/>
+      <path style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" d="M 390.803,221.481 A 66.8443,66.8443 0 1 0 480.018,215.018"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="396.216,216.39 391.389,226.474 390.295,220.992 385.252,218.579 "/>
     </g>
   </g>
 </svg>
