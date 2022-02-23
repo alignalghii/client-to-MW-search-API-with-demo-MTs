@@ -1,6 +1,6 @@
 #!/bin/sed -f
 
-s/\(ellipse\>.*\<stroke-opacity:\s*\)0\.2\>/\12/;
+s/\(ellipse\>.*\<stroke-width:\s*\)0\.2\>/\12/;
 
 ###################################################
 # The `Dia` program is a Diagram drawing program for vector graphics).
