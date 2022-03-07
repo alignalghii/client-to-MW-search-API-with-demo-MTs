@@ -9,7 +9,7 @@ import System.IO (hFlush, stdout)
 runIntegrationTests :: IO ()
 runIntegrationTests = do
     putStrLn "Integration tests:"
-    putStr   "  -  Invalid JSON format response from server is handler by this client correctly: "
+    putStr   "  -  Invalid JSON format response from server is handled by this client correctly: "
     flush
     message <- searchMessage mockBaseURL_formatError "Haskell"
     checking (message == serviceFormatErrorMsg)
