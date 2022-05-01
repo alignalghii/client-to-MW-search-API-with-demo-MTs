@@ -171,7 +171,10 @@ pagination_MT' isStartMode transitEffect = do
 
 Despite of the conciseness of the above, the actual programm offen uses transitional, less explicit, less nice solutions.
 
+---
 [[To the top of this README]](#readme) •|||• [[To project source]](#top) •|||• [[Back to central personal homepage]](https://alignalghii.github.io)
+
+---
 
 ## Usage
 
