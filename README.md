@@ -38,7 +38,10 @@ This little project presented here tries to present monad transformers in a diff
 
 In short: the non-pedagogical, naked technical goal of the project is to provide an API client softwer to the [API:Search](https://www.mediawiki.org/wiki/API:Search) service of MediaWiki.
 
+---
 [(To the top of this README)](#readme) | [(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+
+---
 
 ### WikiMedia's search API
 
@@ -54,7 +57,10 @@ The search results come in a paginated way: the results contain
 
 The user can provide this continuation token in his/her next search alongside with the searchprase, in order  to instruct the server to provide a continuation of the search with the next ten items. Of course, this manual work can be automated, and a client program can hide, („abstract away”) this from the users, and can provide a continuous listing of the found items. Formalizing this technique is essentially what we call a *state machine* for pagination.
 
+---
 [(To the top of this README)](#readme) | [(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+
+---
 
 ### Pagination state machine
 
@@ -185,12 +191,12 @@ Abbreviations:
 me@my-computer:~/haskell/crawler$
 ```
 
-### Examples
-
 ---
 [(To the top of this README)](#readme) | [(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
 
 ---
+
+### Examples
 
 The most  useful command-line options are `--search=`, and its improved version, `--paginate=`. Both these options require a searchphrase argument. For example, if the user wants to see a few Wikipedia article titles for searchphrase „Haskell”, he/hse can issue the command
 ```
@@ -393,7 +399,10 @@ Even those monad transformers are tested without `IO`, which work together in th
     - [`PaginationConceptSeries`](src/PaginationStateMachines/Effectful/PaginationConceptSeries.hs)
     - [`PaginationConceptSeriesSpec`](src/PaginationStateMachines/Effectful/PaginationConceptSeriesSpec.hs)
 
+---
 [(To the top of this README)](#readme) | [(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+
+---
 
 ### Integration tests
 
