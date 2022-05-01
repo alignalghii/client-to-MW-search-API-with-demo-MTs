@@ -1,4 +1,7 @@
-[To the top of this README](#readme) | [To project source](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+---
+[(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+
+---
 
 # Monad transformers demonstrated with a search API client
 
@@ -35,7 +38,7 @@ This little project presented here tries to present monad transformers in a diff
 
 In short: the non-pedagogical, naked technical goal of the project is to provide an API client softwer to the [API:Search](https://www.mediawiki.org/wiki/API:Search) service of MediaWiki.
 
-[To the top of this README](#readme) | [To project source](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+[(To the top of this README)](#readme) | [(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
 
 ### WikiMedia's search API
 
@@ -51,7 +54,7 @@ The search results come in a paginated way: the results contain
 
 The user can provide this continuation token in his/her next search alongside with the searchprase, in order  to instruct the server to provide a continuation of the search with the next ten items. Of course, this manual work can be automated, and a client program can hide, („abstract away”) this from the users, and can provide a continuous listing of the found items. Formalizing this technique is essentially what we call a *state machine* for pagination.
 
-[To the top of this README](#readme) | [To project source](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+[(To the top of this README)](#readme) | [(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
 
 ### Pagination state machine
 
@@ -77,7 +80,10 @@ The essence can be seen better on this simpler figure, presenting the underlying
 
 ![Pagination state machine (simple)](doc/assets/pagination-state-machine--simple.scale.svg "Pagination state machine (simple)")
 
-[To the top of this README](#readme) | [To project source](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+---
+[(To the top of this README)](#readme) | [(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+
+---
 
 ## State machines in various implementations
 
@@ -159,7 +165,7 @@ pagination_MT' isStartMode transitEffect = do
 
 Despite of the conciseness of the above, the actual programm offen uses transitional, less explicit, less nice solutions.
 
-[To the top of this README](#readme) | [To project source](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+[(To the top of this README)](#readme) | [(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
 
 ## Usage
 
@@ -181,7 +187,10 @@ me@my-computer:~/haskell/crawler$
 
 ### Examples
 
-[To the top of this README](#readme) | [To project source](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+---
+[(To the top of this README)](#readme) | [(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+
+---
 
 The most  useful command-line options are `--search=`, and its improved version, `--paginate=`. Both these options require a searchphrase argument. For example, if the user wants to see a few Wikipedia article titles for searchphrase „Haskell”, he/hse can issue the command
 ```
@@ -276,7 +285,10 @@ No more search results
 me@my-computer:~/haskell/crawler$
 ```
 
-[To the top of this README](#readme) | [To project source](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+---
+[(To the top of this README)](#readme) | [(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+
+---
 
 ## Architecture
 
@@ -303,7 +315,10 @@ newtype ErrorMonadT m a = ErrorMonadT {runErrorMonadT :: m (ErrorMonad a)}
 type DocumentTitle = String
 ```
 
-[To the top of this README](#readme) | [To project source](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+---
+[(To the top of this README)](#readme) | [(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+
+---
 
 ### Factual stack
 
@@ -326,7 +341,10 @@ The project intends to be somewhat didactical and historical here (at the cost o
         - [`PaginationConceptSeries`](src/PaginationStateMachines/Effectful/PaginationConceptSeries.hs)
         - [`PaginationConceptSeriesSpec`](src/PaginationStateMachines/Effectful/PaginationConceptSeriesSpec.hs)
 
-[To the top of this README](#readme) | [To project source](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+---
+[(To the top of this README)](#readme) | [(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+
+---
 
 #### Simpler, less capable exception handling
 
@@ -375,7 +393,7 @@ Even those monad transformers are tested without `IO`, which work together in th
     - [`PaginationConceptSeries`](src/PaginationStateMachines/Effectful/PaginationConceptSeries.hs)
     - [`PaginationConceptSeriesSpec`](src/PaginationStateMachines/Effectful/PaginationConceptSeriesSpec.hs)
 
-[To the top of this README](#readme) | [To project source](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+[(To the top of this README)](#readme) | [(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
 
 ### Integration tests
 
@@ -394,7 +412,10 @@ The integration test is implemented in the sourcecode like this:
 - `MetaFeatures`
     - [`IntegrationTest`](src/MetaFeatures/IntegrationTest.hs)
 
-[To the top of this README](#readme) | [To project source](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+---
+[(To the top of this README)](#readme) | [(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+
+---
 
 ### Laziness experimentation
 
@@ -434,4 +455,7 @@ Laziness of Identity, Maybe and IO monads on top of lazy State monad transformer
  ✕  laziness of IO monad on top of the lazy State monad transformer (StateT s IO a): <<!!-INFINITE-LOOP-!!>>
 ```
 
-[To the top of this README](#readme) | [To project source](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+---
+[(To the top of this README)](#readme) | [(To project source)](#top) | [(Back to central personal homepage)](https://alignalghii.github.io)
+
+---
